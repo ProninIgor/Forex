@@ -51,7 +51,6 @@
     <Compile Include="BitterexObjectManager.cs" />
     <Compile Include="BittrexService.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="Data\Tick.cs" />
     <Compile Include="JsonData\MarketPoco.cs" />
     <Compile Include="JsonData\MarketRootPoco.cs" />
     <Compile Include="JsonData\MarketSummaryPoco.cs" />

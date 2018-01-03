@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Bittrex.Data;
 using Bittrex.JsonData;
+using Common.Data;
 using Newtonsoft.Json;
 
 namespace Bittrex
