@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bittrex.Data;
 using Bittrex.JsonData;
 using Common;
+using Common.Data;
 using Newtonsoft.Json;
 
 namespace Bittrex
@@ -41,7 +41,7 @@ namespace Bittrex
                 if (volumes[marketPoco.MarketName] < 200)
                     continue;
 
-                List<Tick> ticks = bom.GetLastTicks(marketPoco.MarketName, "thirtyMin", new TimeSpan(-8, 0, 0, 0)); //thirtyMin oneMin
+                List<Tick> ticks = bom.GetLastTicks(marketPoco.MarketName, "thirtyMin", new TimeSpan(-10, 0, 0, 0)); //thirtyMin oneMin
                 Period period = new Period();
                 period.MarketName = marketPoco.MarketName;
                 period.Ticks = ticks;
