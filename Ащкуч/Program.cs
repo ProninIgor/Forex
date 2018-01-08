@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using Bittrex;
+using Common;
+using Common.Data;
+using DAL;
+using Enums;
 using Newtonsoft.Json;
+using RecipientData;
 
 namespace Forex
 {
@@ -11,9 +18,102 @@ namespace Forex
     {
         static void Main(string[] args)
         {
-            BittrexService bs = new BittrexService();
-            bs.Go();
-        // Адрес ресурса, к которому выполняется запрос
+            //Copier copier = new Copier(new BitterexObjectManager());
+            ////////copier.StartCurrencies();
+            //copier.StartOrders();
+
+            IEnumerable<MarketPoco> marketPocos = Enumerable.Empty<MarketPoco>();
+
+            using (ConnectionDb connection = new ConnectionDb())
+            {
+                marketPocos= connection.GetAll<MarketPoco>();
+            }
+
+
+
+            IStockExcangeObjectManager objectManager = new BitterexObjectManager();
+            List<MarketSummary> marketSummaries = objectManager.GetMarketSummaries();
+            Dictionary<string, List<Order>> res = new Dictionary<string, List<Order>>();
+            foreach (MarketSummary marketSummary in marketSummaries)
+            {
+                MarketPoco marketPoco = marketPocos.FirstOrDefault(x => x.MarketName == marketSummary.MarketName);
+                if (!marketPoco.IsActive || marketPoco.BaseCurrencyId != 2)
+                {
+                    continue;
+                }
+
+                //if (marketSummary.BaseVolume < 100 || marketSummary.BaseVolume > 700)
+                //{
+                //    continue;
+                //}
+
+                List<Order> orders = objectManager.GetOrders(marketSummary.MarketName);
+                res[marketSummary.MarketName] = orders;
+                
+            }
+
+            Console.Clear();
+            foreach (var re in res)
+            {
+                
+                MarketSummary marketSummary = marketSummaries.FirstOrDefault(x => x.MarketName == re.Key);
+                IEnumerable<Order> Buies = re.Value.Where(x => x.OrderType == OrderType.Buy && x.Quantity * x.Rate > 3 && x.Rate % 0.00000010 > 0.000000001 && x.Rate % 0.00000005 > 0.000000001);
+                IEnumerable<Order> Sells = re.Value.Where(x => x.OrderType == OrderType.Sell && x.Quantity * x.Rate > 3 && x.Rate % 0.00000010 > 0.000000001 && x.Rate % 0.00000005 > 0.000000001);
+                if (Buies.Any())
+                {
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine($"{marketSummary.MarketName} -------- Buy ------------");
+                    foreach (Order order in Buies)
+                    {
+                        if (order.Rate % 0.00000010 > 0.000000001 && order.Rate % 0.00000005 > 0.000000001)
+                        {
+                           
+                            Console.WriteLine(
+                                $"{marketSummary.BaseVolume} - {order.Quantity * order.Rate} - {order.Rate:0.#########}");
+                        }
+                    }
+
+                    if (!Sells.Any())
+                    {
+                        Console.WriteLine();
+                    }
+
+                }
+
+                if (Buies.Any() && Sells.Any())
+                {
+                    Console.WriteLine($"{marketSummary.MarketName} -------- Sell ------------");
+                    foreach (Order order in Sells)
+                    {
+                        if (order.Rate % 0.00000010 > 0.000000001 && order.Rate % 0.00000005 > 0.000000001)
+                        {
+
+                            Console.WriteLine(
+                                $"{marketSummary.BaseVolume} - {order.Quantity * order.Rate} - {order.Rate:0.#########}");
+                        }
+                    }
+
+                    Console.WriteLine();
+
+                }
+
+             
+            }
+
+           
+
+          
+
+            Console.ReadKey();
+
+            //markets[0].
+            //List<Order> orders = objectManager.GetOrders("BTC-LTC");
+            //int i = 0;
+
+            //connection.GetAllCurrencies();
+            //BittrexService bs = new BittrexService();
+            //bs.Go();
+            // Адрес ресурса, к которому выполняется запрос
             //Console.WriteLine("Введите значение ВЫШЕ которого будет сигнал");
             //string readLine = Console.ReadLine();
             //double max;
@@ -48,7 +148,7 @@ namespace Forex
             ////string downloadString = webClient1.DownloadString(url2);
             ////webClient1.Dispose();
             //long time = 14963334701178;
-           
+
             //// Создаём объект WebClient
             //using (var webClient = new WebClient())
             //{
@@ -61,18 +161,18 @@ namespace Forex
             //        long timeSpanTotalMilliseconds = (long)timeSpan.TotalMilliseconds/1000;
             //        string response = webClient.DownloadString(string.Format(url2, timeSpanTotalMilliseconds));
 
-                   
+
             //        string str = response.Substring(64, 6);
             //       double value = double.Parse(str.Replace(".", ","));
-                    
+
             //        Console.WriteLine(value);
             //        if (value < min || value > max)
             //            Console.Beep(5000, 500);
 
             //        Thread.Sleep(1000);
-                    
+
             //    }
-               
+
 
             //}
         }

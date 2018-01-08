@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Bittrex.JsonData
 {
     [JsonObject(Title = "Result")]
-    public class MarketSummaryPoco
+    public class MarketSummaryJson
     {
         public string MarketName { get; set; }
         public double High { get; set; }

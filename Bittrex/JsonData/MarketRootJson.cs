@@ -5,13 +5,13 @@ namespace Bittrex.JsonData
 {
    
         [JsonObject(Title = "RootObject")]
-        public class MarketRootPoco
-        {
+        public class MarketRootJson : IItemJsons<MarketJson>
+    {
             public bool success { get; set; }
             public string message { get; set; }
             
             [JsonProperty(PropertyName = "result")]
-            public List<MarketPoco> MarketPocos { get; set; }
+            public List<MarketJson> ItemJsons { get; set; }
         }
     
 }

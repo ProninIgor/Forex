@@ -15,7 +15,7 @@ namespace Bittrex
 
         public string GetCurrencies()
         {
-            string currenciesAddress = $"{ApiKey_v2_0}/getcurrencies";
+            string currenciesAddress = $"{ApiKey_v1_1}/getcurrencies";
             return GetResponse(currenciesAddress);
         }
 
@@ -29,6 +29,12 @@ namespace Bittrex
         {
             string marketSummariesAddress = $"{ApiKey_v1_1}/getmarketsummaries";
             return GetResponse(marketSummariesAddress);
+        }
+
+        public string GetOrderBooks(string market, string type = "both")
+        {
+            string orderBookAddress = $"{ApiKey_v1_1}/getorderbook?market={market}&type={type}";
+            return GetResponse(orderBookAddress);
         }
 
         public string GetMarketSummary(string market)

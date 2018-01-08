@@ -4,9 +4,8 @@ using Newtonsoft.Json;
 namespace Bittrex.JsonData
 {
     [JsonObject(Title = "Result")]
-    public class MarketPoco
+    public class MarketJson
     {
-        
             public string MarketCurrency { get; set; }
             public string BaseCurrency { get; set; }
             public string MarketCurrencyLong { get; set; }

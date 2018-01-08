@@ -51,12 +51,19 @@
     <Compile Include="BitterexObjectManager.cs" />
     <Compile Include="BittrexService.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="JsonData\MarketPoco.cs" />
-    <Compile Include="JsonData\MarketRootPoco.cs" />
-    <Compile Include="JsonData\MarketSummaryPoco.cs" />
-    <Compile Include="JsonData\MarketSummaryRootPoco.cs" />
-    <Compile Include="JsonData\TickPoco.cs" />
-    <Compile Include="JsonData\TickRootPoco.cs" />
+    <Compile Include="JsonData\CurrencyJson.cs" />
+    <Compile Include="JsonData\CurrencyRootJson.cs" />
+    <Compile Include="JsonData\IItemJsons.cs" />
+    <Compile Include="JsonData\MarketJson.cs" />
+    <Compile Include="JsonData\MarketRootJson.cs" />
+    <Compile Include="JsonData\MarketSummaryJson.cs" />
+    <Compile Include="JsonData\MarketSummaryRootJson.cs" />
+    <Compile Include="JsonData\OrderBook\Buy.cs" />
+    <Compile Include="JsonData\OrderBook\OrderBook.cs" />
+    <Compile Include="JsonData\OrderBook\OrderBookRootJson.cs" />
+    <Compile Include="JsonData\OrderBook\Sell.cs" />
+    <Compile Include="JsonData\TickJson.cs" />
+    <Compile Include="JsonData\TickRootJson.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +71,14 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{029db0e6-b418-4755-8f93-5c42e668577a}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{38893287-3c61-4444-88f8-f79aa820456c}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Enums\Enums.csproj">
+      <Project>{c09a3c16-1ea5-4f58-9b8c-f10b462f9edd}</Project>
+      <Name>Enums</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

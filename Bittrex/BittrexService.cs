@@ -19,17 +19,17 @@ namespace Bittrex
 
             BitterexAPI api = new BitterexAPI();
             string markets = api.GetMarkets();
-            MarketRootPoco marketRootPoco = JsonConvert.DeserializeObject<MarketRootPoco>(markets);
+            MarketRootJson marketRootPoco = JsonConvert.DeserializeObject<MarketRootJson>(markets);
 
             string marketSummaries = api.GetMarketSummaries();
-            MarketSummaryRootPoco marketSummaryRootPoco = JsonConvert.DeserializeObject<MarketSummaryRootPoco>(marketSummaries);
-            Dictionary<string, double> volumes = marketSummaryRootPoco.MarketSummaryPocos.ToDictionary(x=>x.MarketName, x=>x.BaseVolume);
+            MarketSummaryRootJson marketSummaryRootJson = JsonConvert.DeserializeObject<MarketSummaryRootJson>(marketSummaries);
+            Dictionary<string, double> volumes = marketSummaryRootJson.ItemJsons.ToDictionary(x=>x.MarketName, x=>x.BaseVolume);
 
-            Dictionary<string, IEnumerable<TickPoco>> responcies = new Dictionary<string, IEnumerable<TickPoco>>();
+            Dictionary<string, IEnumerable<TickJson>> responcies = new Dictionary<string, IEnumerable<TickJson>>();
             List<Period> periods = new List<Period>();
             int i = DateTime.Today.Day - 3;
             BitterexObjectManager bom = new BitterexObjectManager();
-            foreach (MarketPoco marketPoco in marketRootPoco.MarketPocos.Where(x=>x.BaseCurrency == "BTC" && x.IsActive))
+            foreach (MarketJson marketPoco in marketRootPoco.ItemJsons.Where(x=>x.BaseCurrency == "BTC" && x.IsActive))
             {
                 if (marketPoco.MarketName == "BTC-DOGE")
                 {
@@ -48,8 +48,8 @@ namespace Bittrex
                 period.LastVolume = volumes[marketPoco.MarketName];
                 periods.Add(period);
                 //string ticks = api.GetTicks(marketPoco.MarketName, "thirtyMin");
-                //TickRootPoco tickRootPoco = JsonConvert.DeserializeObject<TickRootPoco>(ticks);
-                //List<TickPoco> tickPocos = tickRootPoco.TickPocos.Where(x=> x.DateTime.Day > i).ToList();
+                //TickRootJson tickRootPoco = JsonConvert.DeserializeObject<TickRootJson>(ticks);
+                //List<TickJson> tickPocos = tickRootPoco.ItemJsons.Where(x=> x.DateTime.Day > i).ToList();
                 //responcies[marketPoco.MarketName] = tickPocos;
                 //double min = tickPocos.MinAvg(x => x.Value);
                 //double max = tickPocos.MaxAvg(x => x.Value);

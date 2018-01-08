@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Bittrex.JsonData
 {
     [JsonObject(Title = "Result")]
-    public class TickPoco
+    public class TickJson
     {
         private double _value;
 

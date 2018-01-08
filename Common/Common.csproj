@@ -41,10 +41,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Data\Currency.cs" />
+    <Compile Include="Data\Market.cs" />
+    <Compile Include="Data\MarketSummary.cs" />
+    <Compile Include="Data\Order.cs" />
     <Compile Include="Data\Tick.cs" />
+    <Compile Include="IStockExcangeObjectManager.cs" />
     <Compile Include="IStockExchangeAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Enums\Enums.csproj">
+      <Project>{c09a3c16-1ea5-4f58-9b8c-f10b462f9edd}</Project>
+      <Name>Enums</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
