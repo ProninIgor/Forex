@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using Bittrex;
 using Common;
 using Common.Data;
@@ -16,12 +18,22 @@ namespace Forex
 {
     class Program
     {
+        private class Message
+        {
+            public double Last { get; set; }
+            public string MarketName { get; set; }
+            public double BaseVolume { get; set; }
+            public IEnumerable<Order> Buies { get; set; }
+            public IEnumerable<Order> Sells { get; set; }
+        }
+
         static void Main(string[] args)
         {
             //Copier copier = new Copier(new BitterexObjectManager());
             ////////copier.StartCurrencies();
             //copier.StartOrders();
-
+            ILogger logger = new EmptyLogger();
+            ILogger logger2 = new FileLogger(@"D:\Фото\bittrex");
             IEnumerable<MarketPoco> marketPocos = Enumerable.Empty<MarketPoco>();
 
             using (ConnectionDb connection = new ConnectionDb())
@@ -33,13 +45,25 @@ namespace Forex
 
             IStockExcangeObjectManager objectManager = new BitterexObjectManager();
             List<MarketSummary> marketSummaries = objectManager.GetMarketSummaries();
-            Dictionary<string, List<Order>> res = new Dictionary<string, List<Order>>();
-            foreach (MarketSummary marketSummary in marketSummaries)
+            ConcurrentDictionary<string, List<Order>> res = new ConcurrentDictionary<string, List<Order>>();
+            Parallel.ForEach(marketSummaries, (marketSummary) =>
             {
+                // foreach (MarketSummary marketSummary in marketSummaries)
+                // {
+                if (marketSummary.MarketName.Contains("RDD")
+                    || marketSummary.MarketName.Contains("SC")
+                    || marketSummary.MarketName.Contains("ETH")
+                    || marketSummary.MarketName.Contains("DOGE")
+                    || marketSummary.MarketName.Contains("DGB")
+                )
+                {
+                    return;
+                }
+
                 MarketPoco marketPoco = marketPocos.FirstOrDefault(x => x.MarketName == marketSummary.MarketName);
                 if (!marketPoco.IsActive || marketPoco.BaseCurrencyId != 2)
                 {
-                    continue;
+                    return;
                 }
 
                 //if (marketSummary.BaseVolume < 100 || marketSummary.BaseVolume > 700)
@@ -49,61 +73,118 @@ namespace Forex
 
                 List<Order> orders = objectManager.GetOrders(marketSummary.MarketName);
                 res[marketSummary.MarketName] = orders;
-                
-            }
+                Console.WriteLine(marketSummary.MarketName);
+            });
+           // }
 
-            Console.Clear();
-            foreach (var re in res)
+
+            List<Message> result = new List<Message>();
+        foreach (var re in res)
             {
-                
                 MarketSummary marketSummary = marketSummaries.FirstOrDefault(x => x.MarketName == re.Key);
-                IEnumerable<Order> Buies = re.Value.Where(x => x.OrderType == OrderType.Buy && x.Quantity * x.Rate > 3 && x.Rate % 0.00000010 > 0.000000001 && x.Rate % 0.00000005 > 0.000000001);
-                IEnumerable<Order> Sells = re.Value.Where(x => x.OrderType == OrderType.Sell && x.Quantity * x.Rate > 3 && x.Rate % 0.00000010 > 0.000000001 && x.Rate % 0.00000005 > 0.000000001);
+
+                Message mes = new Message();
+                mes.MarketName = marketSummary.MarketName;
+                mes.Last = marketSummary.Last;
+                mes.BaseVolume = Math.Round(marketSummary.BaseVolume);
+
+                
+                IEnumerable<Order> Buies = re.Value.Where(x => x.OrderType == OrderType.Buy && x.Quantity * x.Rate > 2 && x.Rate % 0.00000010 > 0.000000001 && x.Rate % 0.00000005 > 0.000000001);
+                IEnumerable<Order> Sells = re.Value.Where(x => x.OrderType == OrderType.Sell && x.Quantity * x.Rate > 2 && x.Rate % 0.00000010 > 0.000000001 && x.Rate % 0.00000005 > 0.000000001);
+                logger.Write("--------------------");
+                logger.Write($"{marketSummary.MarketName} - {Math.Round(marketSummary.BaseVolume)} -------- Buy ------------");
                 if (Buies.Any())
                 {
-                    Console.WriteLine("--------------------");
-                    Console.WriteLine($"{marketSummary.MarketName} -------- Buy ------------");
+                    mes.Buies = Buies.OrderBy(x=>x.Rate);
                     foreach (Order order in Buies)
                     {
                         if (order.Rate % 0.00000010 > 0.000000001 && order.Rate % 0.00000005 > 0.000000001)
                         {
-                           
-                            Console.WriteLine(
-                                $"{marketSummary.BaseVolume} - {order.Quantity * order.Rate} - {order.Rate:0.#########}");
+                            
+                            logger.Write(
+                                $"{marketSummary.Last}- {order.Quantity * order.Rate} - {order.Rate:0.#########}");
                         }
                     }
 
                     if (!Sells.Any())
                     {
-                        Console.WriteLine();
+                        logger.Write();
                     }
-
+                    result.Add(mes);
                 }
 
                 if (Buies.Any() && Sells.Any())
                 {
-                    Console.WriteLine($"{marketSummary.MarketName} -------- Sell ------------");
+                    mes.Sells = Sells.OrderBy(x=>x.Rate);
+                    logger.Write($"{marketSummary.MarketName} -------- Sell ------------");
                     foreach (Order order in Sells)
                     {
                         if (order.Rate % 0.00000010 > 0.000000001 && order.Rate % 0.00000005 > 0.000000001)
                         {
 
-                            Console.WriteLine(
-                                $"{marketSummary.BaseVolume} - {order.Quantity * order.Rate} - {order.Rate:0.#########}");
+                            logger.Write(
+                                $"{order.Quantity * order.Rate} - {order.Rate:0.#########}");
                         }
                     }
 
-                    Console.WriteLine();
+                    logger.Write();
 
                 }
 
-             
+                //IEnumerable<Order> Buies1 = re.Value.Where(x => x.OrderType == OrderType.Buy).Where(x=>x.Rate * x.Quantity > 1.5).OrderByDescending(x=>x.Rate).Take(5);
+                //IEnumerable<Order> Sells1 = re.Value.Where(x => x.OrderType == OrderType.Sell).Where(x => x.Rate * x.Quantity > 1.5).OrderBy(x => x.Rate).Take(5);
+
+                //logger.Write("-------------- Top 5 ----------------------------");
+                //logger.Write($"-------- Buy ------------");
+                //foreach (Order order in Buies1)
+                //{
+                   
+
+                //        logger.Write(
+                //            $"{marketSummary.Last*100000000}- {order.Quantity * order.Rate} - {order.Rate * 100000000}");
+                    
+                //}
+                //logger.Write($"{marketSummary.MarketName} -------- Sell ------------");
+                //foreach (Order order in Sells1)
+                //{
+                    
+
+                //        logger.Write(
+                //            $"{order.Quantity * order.Rate} - {order.Rate * 100000000}");
+                    
+                //}
+                //logger.Write("--------------------");
+                //logger.Write();
             }
+
+            foreach (Message message in result.OrderBy(x=>(x.Last - x.Buies.FirstOrDefault().Rate)/ x.Last))
+            {
+                logger2.Write($"[{message.MarketName}] - [{message.BaseVolume}] - [{message.Last* 100000000}]----------");
+                foreach (Order messageBuy in message.Buies)
+                {
+                    logger2.Write(
+                                $"[Buy ]-[{messageBuy.Rate * 100000000}]-{messageBuy.Quantity * messageBuy.Rate}");
+                }
+
+                logger2.Write($"[Curr]-[{message.Last * 100000000}]");
+                if (message.Sells != null)
+                {
+                    foreach (Order messageSell in message.Sells)
+                    {
+                        logger2.Write(
+                            $"[Sell]-[{messageSell.Rate * 100000000}]-{messageSell.Quantity * messageSell.Rate}");
+                    }
+                }
+                logger2.Write();
+            }
+            logger2.Close();
+
+            logger.Close();
 
            
 
           
-
+            Console.WriteLine("OK. Press any key.");
             Console.ReadKey();
 
             //markets[0].
