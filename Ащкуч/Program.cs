@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex;
+using Bittrex.Core;
 using Common;
 using Common.Data;
 using DAL;
@@ -29,8 +30,12 @@ namespace Forex
 
         static void Main(string[] args)
         {
+            MonitoringManager monitoringManager = new MonitoringManager(new[]{1, 2 , 3});
+            monitoringManager.Init();
+            monitoringManager.Start();
 
 
+            /*
             Copier copier = new Copier(new BitterexObjectManager());
             //copier.StartCurrencies();
             //copier.StartMarkets();
@@ -58,7 +63,7 @@ namespace Forex
             //GetOpenOrdersResponse openOrders1 = exchange.GetOpenOrders("NXC");
 
             
-            IStockExcangeObjectManager objectManager = new BitterexObjectManager();
+            /*IStockExcangeObjectManager objectManager = new BitterexObjectManager();
             //List<OpenOrder> openOrders = objectManager.GetOpenOrders("601659f153e344fb85dd106c6f5dfaad", "BTC-NXC");
             List<MarketSummary> marketSummaries = objectManager.GetMarketSummaries();
             ConcurrentDictionary<string, List<Order>> res = new ConcurrentDictionary<string, List<Order>>();
@@ -272,7 +277,7 @@ namespace Forex
             //    }
 
 
-            //}
+            //}*/
         }
     }
 }

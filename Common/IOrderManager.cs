@@ -38,7 +38,7 @@ namespace Bittrex.Core
         void BuyOrderComplited(int marketId);
 
         void SellOrderComplited(int marketId);
+
+        void Working();
     }
-
-
 }

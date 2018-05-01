@@ -1,11 +1,14 @@
-namespace Bittrex.Core
+using System;
+using Bittrex.Core;
+
+namespace Common
 {
     public class TradeManager : ITradeManager
     {
         public IRealTimeData RealTimeData { get; }
         public bool SetBuyOrder(int marketId, double quality, double rate)
         {
-            //todo
+            Console.WriteLine($"{marketId}-{quality}-{rate}");
             return true;
         }
 
