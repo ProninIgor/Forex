@@ -15,5 +15,7 @@ namespace Common
         List<Order> GetOrders(string marketName);
 
         List<MarketSummary> GetMarketSummaries();
+
+        List<OpenOrder> GetOpenOrders(string apiKey, string marketName);
     }
 }

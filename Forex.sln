@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enums", "Enums\Enums.csproj", "{C09A3C16-1EA5-4F58-9B8C-F10B462F9EDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bittrex.Core", "Bittrex.Core\Bittrex.Core.csproj", "{891EB15E-E8E2-40D6-AB86-065FB4D19CF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{C09A3C16-1EA5-4F58-9B8C-F10B462F9EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C09A3C16-1EA5-4F58-9B8C-F10B462F9EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C09A3C16-1EA5-4F58-9B8C-F10B462F9EDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891EB15E-E8E2-40D6-AB86-065FB4D19CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891EB15E-E8E2-40D6-AB86-065FB4D19CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891EB15E-E8E2-40D6-AB86-065FB4D19CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891EB15E-E8E2-40D6-AB86-065FB4D19CF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

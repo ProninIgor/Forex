@@ -8,5 +8,6 @@ namespace Common
         string GetMarketSummaries();
         string GetMarketSummary(string market);
         string GetTicks(string marketName, string tickInterval);
+        string GetOpenOrders(string apiKey, string marketName);
     }
 }

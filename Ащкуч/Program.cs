@@ -29,8 +29,13 @@ namespace Forex
 
         static void Main(string[] args)
         {
-            //Copier copier = new Copier(new BitterexObjectManager());
-            ////////copier.StartCurrencies();
+
+
+            Copier copier = new Copier(new BitterexObjectManager());
+            //copier.StartCurrencies();
+            //copier.StartMarkets();
+            //copier.StartMarketSummaries();
+            //return;
             //copier.StartOrders();
             ILogger logger = new EmptyLogger();
             ILogger logger2 = new FileLogger(@"D:\Фото\bittrex");
@@ -41,9 +46,20 @@ namespace Forex
                 marketPocos= connection.GetAll<MarketPoco>();
             }
 
+            /*
+             
+             
+             */
+            //Exchange exchange = new Exchange();
+            //ExchangeContext exchangeContext = new ExchangeContext();
+            //exchangeContext.QuoteCurrency = "BTC";
+            //exchangeContext.Simulate = false;
+            //exchange.Initialise(exchangeContext);
+            //GetOpenOrdersResponse openOrders1 = exchange.GetOpenOrders("NXC");
 
-
+            
             IStockExcangeObjectManager objectManager = new BitterexObjectManager();
+            //List<OpenOrder> openOrders = objectManager.GetOpenOrders("601659f153e344fb85dd106c6f5dfaad", "BTC-NXC");
             List<MarketSummary> marketSummaries = objectManager.GetMarketSummaries();
             ConcurrentDictionary<string, List<Order>> res = new ConcurrentDictionary<string, List<Order>>();
             Parallel.ForEach(marketSummaries, (marketSummary) =>
@@ -61,6 +77,7 @@ namespace Forex
                 }
 
                 MarketPoco marketPoco = marketPocos.FirstOrDefault(x => x.MarketName == marketSummary.MarketName);
+                
                 if (!marketPoco.IsActive || marketPoco.BaseCurrencyId != 2)
                 {
                     return;
@@ -157,7 +174,7 @@ namespace Forex
                 //logger.Write();
             }
 
-            foreach (Message message in result.OrderBy(x=>(x.Last - x.Buies.FirstOrDefault().Rate)/ x.Last))
+            foreach (Message message in result.OrderBy(x=>(x.Last - x.Buies.LastOrDefault().Rate)/ x.Last))
             {
                 logger2.Write($"[{message.MarketName}] - [{message.BaseVolume}] - [{message.Last* 100000000}]----------");
                 foreach (Order messageBuy in message.Buies)

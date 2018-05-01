@@ -47,10 +47,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiCall.cs" />
+    <Compile Include="ApiCallResponse.cs" />
     <Compile Include="BitterexAPI.cs" />
     <Compile Include="BitterexObjectManager.cs" />
     <Compile Include="BittrexService.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Data\AccountBalance.cs" />
+    <Compile Include="Data\CompletedOrder.cs" />
+    <Compile Include="Data\GetBalancesResponse.cs" />
+    <Compile Include="Data\GetMarketHistoryResponse.cs" />
+    <Compile Include="Data\GetMarketSummaryResponse.cs" />
+    <Compile Include="Data\GetOpenOrdersResponse.cs" />
+    <Compile Include="Data\GetOrderBookResponse.cs" />
+    <Compile Include="Data\GetOrderHistoryResponse.cs" />
+    <Compile Include="Data\MarketTrade.cs" />
+    <Compile Include="Data\OpenOrder.cs" />
+    <Compile Include="Data\OrderEntry.cs" />
+    <Compile Include="Data\OrderResponse.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Exchange.cs" />
+    <Compile Include="ExchangeContext.cs" />
+    <Compile Include="IBittrexExchange.cs" />
     <Compile Include="JsonData\CurrencyJson.cs" />
     <Compile Include="JsonData\CurrencyRootJson.cs" />
     <Compile Include="JsonData\IItemJsons.cs" />
@@ -58,6 +76,8 @@
     <Compile Include="JsonData\MarketRootJson.cs" />
     <Compile Include="JsonData\MarketSummaryJson.cs" />
     <Compile Include="JsonData\MarketSummaryRootJson.cs" />
+    <Compile Include="JsonData\OpenOrderJson.cs" />
+    <Compile Include="JsonData\OpenOrderRootJson.cs" />
     <Compile Include="JsonData\OrderBook\Buy.cs" />
     <Compile Include="JsonData\OrderBook\OrderBook.cs" />
     <Compile Include="JsonData\OrderBook\OrderBookRootJson.cs" />

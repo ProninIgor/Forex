@@ -92,12 +92,24 @@ namespace Bittrex
             return GetItems<MarketSummary, MarketSummaryRootJson, MarketSummaryJson>(marketSummaries);
         }
 
+        public List<OpenOrder> GetOpenOrders(string apiKey, string marketName)
+        {
+            BitterexAPI api = new BitterexAPI();
+            string openOrders = api.GetOpenOrders(apiKey, marketName);
+            return GetItems<OpenOrder, OpenOrderRootJson, OpenOrderJson>(openOrders);
+        }
+
+
         public List<Order> GetOrders(string marketName)
         {
             BitterexAPI api = new BitterexAPI();
             string orderBooks = api.GetOrderBooks(marketName);
             OrderBookRootJson orderBookRootJson = JsonConvert.DeserializeObject<OrderBookRootJson>(orderBooks);
             List<Order> result = new List<Order>();
+
+            if(orderBookRootJson.OrderBookJson.Buys.Count == 0 || orderBookRootJson.OrderBookJson.Sells.Count == 0)
+                return new List<Order>();
+
             orderBookRootJson.OrderBookJson.Buys.ForEach(x=>result.Add(this.mapper.Map<BuyJson, Order>(x)));
             orderBookRootJson.OrderBookJson.Sells.ForEach(x=>result.Add(this.mapper.Map<SellJson, Order>(x)));
             return result;
