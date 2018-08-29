@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.AccessControl;
 using System.Threading;
 using Common.Entities;
@@ -10,8 +11,7 @@ namespace Common
     {
         private double GetCurrentRate(int marketId)
         {
-            //Todo переделать на реальное получение
-            return 0.005;
+            return this.ObjectManager.GetCurrentMarketValue(marketId);
         }
 
         /// <summary>
@@ -33,14 +33,14 @@ namespace Common
 
         private OrderCandidate GetBuyOrderCandidate(int marketId)
         {
-            AnalizeSection analizeSection = this.AnalizeManager.Calculate(marketId);
+            AnalizeSection analizeSection = this.AnalizeManager.Calculate(marketId, CalculateType.Agvtype);
             if (analizeSection == null)
                 return null;
 
             double currentRate = GetCurrentRate(marketId);
 
             //todo проверки на маркетИд
-            if (analizeSection.InSection(currentRate) && marketId == 2)
+            if (analizeSection.InSection(currentRate))
             {
                 double buyRate = GetBuyRate(marketId);
                 //todo проверку на вхождение в диапазон

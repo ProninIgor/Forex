@@ -15,14 +15,14 @@ namespace Bittrex.Core
 
         public ITradeManager TradeManager { get; }
 
-        public MonitoringManager(int[] marketIds)
+        public MonitoringManager(int[] marketIds, IStockExcangeObjectManager stockExcangeObjectManager, IObjectManager objectManager)
         {
             if (marketIds.Distinct().Count() != marketIds.Length)
                 throw new ArgumentException("Only unique marketIds"); 
 
             this.marketIds = marketIds;
 
-            OrderManager = new OrderManager(marketIds);
+            OrderManager = new OrderManager(marketIds, stockExcangeObjectManager, objectManager);
             TradeManager = new TradeManager();
         }
 

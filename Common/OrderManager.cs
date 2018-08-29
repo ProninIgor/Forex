@@ -14,9 +14,12 @@ namespace Common
         private ConcurrentDictionary<string, OrderCandidate> orderCandidates = new ConcurrentDictionary<string, OrderCandidate>();
         private int[] marketIds;
         private IAnalizeManager AnalizeManager { get; set; }
- 
+        public IStockExcangeObjectManager StockExcangeObjectManager { get; set; }
+        public IObjectManager ObjectManager { get; }
 
-        public OrderManager(int[] marketIds)
+
+
+        public OrderManager(int[] marketIds, IStockExcangeObjectManager stockExcangeObjectManager, IObjectManager objectManager)
         {
             this.marketIds = marketIds;
             foreach (int marketId in marketIds)
@@ -26,7 +29,9 @@ namespace Common
                 key = GetSellKey(marketId);
                 orderCandidates.TryAdd(key, null);
             }
-            this.AnalizeManager = new AnalizeManager();
+            this.AnalizeManager = new AnalizeManager(objectManager);
+            this.StockExcangeObjectManager = stockExcangeObjectManager;
+            this.ObjectManager = objectManager;
         }
 
         private string GetSellKey(int marketId)
@@ -95,6 +100,8 @@ namespace Common
 
             return $"{typeName}{marketId}";
         }
+
+       
 
         private class OrderCandidate
         {

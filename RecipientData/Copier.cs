@@ -64,9 +64,6 @@ namespace RecipientData
             List<Market> markets = this.objectManager.GetMarkets();
             using (ConnectionDb connection = new ConnectionDb())
             {
-
-
-
                 IEnumerable<CurrencyPoco> currencies = connection.GetAll<CurrencyPoco>();
                 Dictionary<string, int> currenciesDictionary = currencies.ToDictionary(x => x.Code, y => y.Id);
 

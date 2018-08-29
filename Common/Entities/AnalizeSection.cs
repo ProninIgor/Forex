@@ -12,6 +12,16 @@ namespace Common.Entities
 
         public double MaxRate { get; set; }
 
+        public AnalizeSection()
+        {
+        }
+
+        public AnalizeSection(double minRate, double maxRate)
+        {
+            MinRate = minRate;
+            MaxRate = maxRate;
+        }
+
         public bool InSection(double rate)
         {
             return this.MinRate <= rate && rate <= this.MaxRate;

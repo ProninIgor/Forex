@@ -115,6 +115,15 @@ namespace Bittrex
             return result;
         }
 
+        public MarketSummary GetMarketSummary(string marketName)
+        {
+            BitterexAPI api = new BitterexAPI();
+            string marketSummary = api.GetMarketSummary(marketName);
+            List<MarketSummary> marketSummaries = GetItems<MarketSummary, MarketSummaryRootJson, MarketSummaryJson>(marketSummary);
+            
+            return marketSummaries[0];
+        }
+
         private List<TResult> GetItems<TResult, TRoot, TItem>(string json)
             where TItem : class 
             where TRoot : IItemJsons<TItem>
@@ -129,7 +138,5 @@ namespace Bittrex
 
             return result;
         }
-
-        
     }
 }

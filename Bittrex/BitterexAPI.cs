@@ -48,7 +48,7 @@ namespace Bittrex
 
         public string GetMarketSummary(string market)
         {
-            string marketSummaryAddress = $"{ApiKeyPublic_v2_0}/getmarketsummary?market={market}";
+            string marketSummaryAddress = $"{ApiKeyPublic_v1_1}/getmarketsummary?market={market}";
             return GetResponse(marketSummaryAddress);
         }
 

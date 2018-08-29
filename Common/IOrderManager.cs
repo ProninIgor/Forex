@@ -1,3 +1,4 @@
+using Common;
 using Common.Data;
 
 namespace Bittrex.Core
@@ -39,6 +40,9 @@ namespace Bittrex.Core
 
         void SellOrderComplited(int marketId);
 
+
         void Working();
+
+        IStockExcangeObjectManager StockExcangeObjectManager { get; set; }
     }
 }

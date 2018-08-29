@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalizeManager.cs" />
     <Compile Include="Data\Currency.cs" />
     <Compile Include="Data\Market.cs" />
     <Compile Include="Data\MarketSummary.cs" />
@@ -47,8 +48,10 @@
     <Compile Include="Data\Order.cs" />
     <Compile Include="Data\Tick.cs" />
     <Compile Include="Entities\AnalizeSection.cs" />
+    <Compile Include="Entities\CalculateType.cs" />
     <Compile Include="IAnalizeManager.cs" />
     <Compile Include="IMonitoringManager.cs" />
+    <Compile Include="IObjectManager.cs" />
     <Compile Include="IOrderManager.cs" />
     <Compile Include="IRealTimeData.cs" />
     <Compile Include="IStockExcangeObjectManager.cs" />

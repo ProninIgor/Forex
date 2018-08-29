@@ -7,20 +7,44 @@ namespace Common.Data
         private double value;
         private double delta;
 
+        /// <summary>
+        /// Значение при открытие тика
+        /// </summary>
         public double OpenValue { get; set; }
 
+        /// <summary>
+        /// Максимальное значение за тик
+        /// </summary>
         public double HighValue { get; set; }
 
+        /// <summary>
+        /// Минимальное значение за тик
+        /// </summary>
         public double LowValue { get; set; }
 
+        /// <summary>
+        /// Значение при закрытии тика
+        /// </summary>
         public double CloseValue { get; set; }
 
+        /// <summary>
+        /// Объём торгов при тике
+        /// </summary>
         public double Volume { get; set; }
 
+        /// <summary>
+        /// Дата ничала тика
+        /// </summary>
         public DateTime DateTime { get; set; }
 
+        /// <summary>
+        /// Объём тика в биткойнах
+        /// </summary>
         public double BitcoinValue { get; set; }
 
+        /// <summary>
+        /// Медиана тика
+        /// </summary>
         public double Value
         {
             get
@@ -31,6 +55,9 @@ namespace Common.Data
             }
         }
 
+        /// <summary>
+        /// Изменение за тик. Дельта в долевом значении
+        /// </summary>
         public double Delta {
             get
             {
