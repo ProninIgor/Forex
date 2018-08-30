@@ -12,7 +12,6 @@ using Common;
 using Common.Data;
 using DAL;
 using Enums;
-using Newtonsoft.Json;
 using RecipientData;
 
 namespace Forex
