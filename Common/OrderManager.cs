@@ -54,26 +54,26 @@ namespace Common
             return this.orderCandidates[GetSellKey(marketId)] != null;
         }
 
-        public Order GetBuyOrder(int marketId)
+        public OrderDTO GetBuyOrder(int marketId)
         {
             OrderCandidate orderCandidate = this.orderCandidates[GetBuyKey(marketId)];
 
-            Order buyOrder = orderCandidate == null 
+            OrderDTO buyOrderDto = orderCandidate == null 
                 ? null 
-                : new Order(){OrderType = OrderType.Buy, Quantity = orderCandidate.Quantity, Rate = orderCandidate.Rate};
+                : new OrderDTO(){OrderType = OrderType.Buy, Quantity = orderCandidate.Quantity, Rate = orderCandidate.Rate};
 
-            return buyOrder;
+            return buyOrderDto;
         }
 
-        public Order GetSellOrder(int marketId)
+        public OrderDTO GetSellOrder(int marketId)
         {
             OrderCandidate orderCandidate = this.orderCandidates[GetSellKey(marketId)];
 
-            Order sellOrder = orderCandidate == null
+            OrderDTO sellOrderDto = orderCandidate == null
                 ? null
-                : new Order() { OrderType = OrderType.Sell, Quantity = orderCandidate.Quantity, Rate = orderCandidate.Rate };
+                : new OrderDTO() { OrderType = OrderType.Sell, Quantity = orderCandidate.Quantity, Rate = orderCandidate.Rate };
 
-            return sellOrder;
+            return sellOrderDto;
         }
 
         public void BuyOrderComplited(int marketId)

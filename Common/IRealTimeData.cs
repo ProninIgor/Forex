@@ -4,7 +4,7 @@ namespace Bittrex.Core
 {
     public interface IRealTimeData
     {
-        Order GetAccountOrders(int marketId);
+        OrderDTO GetAccountOrders(int marketId);
 
     }
 }

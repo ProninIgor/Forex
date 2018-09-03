@@ -23,8 +23,8 @@ namespace Forex
             public double Last { get; set; }
             public string MarketName { get; set; }
             public double BaseVolume { get; set; }
-            public IEnumerable<Order> Buies { get; set; }
-            public IEnumerable<Order> Sells { get; set; }
+            public IEnumerable<OrderDTO> Buies { get; set; }
+            public IEnumerable<OrderDTO> Sells { get; set; }
         }
 
         static void Main(string[] args)

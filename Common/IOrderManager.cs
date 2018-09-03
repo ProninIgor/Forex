@@ -27,14 +27,14 @@ namespace Bittrex.Core
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        Order GetBuyOrder(int marketId);
+        OrderDTO GetBuyOrder(int marketId);
 
         /// <summary>
         /// Получить ставку на продажу
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        Order GetSellOrder(int marketId);
+        OrderDTO GetSellOrder(int marketId);
 
         void BuyOrderComplited(int marketId);
 

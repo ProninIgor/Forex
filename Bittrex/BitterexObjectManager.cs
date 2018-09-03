@@ -6,6 +6,7 @@ using AutoMapper.Configuration;
 using Bittrex.JsonData;
 using Common;
 using Common.Data;
+using Common.Entities;
 using Enums;
 using Newtonsoft.Json;
 
@@ -14,54 +15,56 @@ namespace Bittrex
     public class BitterexObjectManager : IStockExcangeObjectManager
     {
         private IRuntimeMapper mapper;
+        private IStockExcangeObjectManager _stockExcangeObjectManagerImplementation;
+
         public BitterexObjectManager()
         {
             MapperConfigurationExpression cfg = new MapperConfigurationExpression();
-            cfg.CreateMap<TickJson, Tick>();
-            cfg.CreateMap<CurrencyJson, Currency>()
+            cfg.CreateMap<TickJson, TickDTO>();
+            cfg.CreateMap<CurrencyJson, CurrencyDTO>()
                 .ForMember(d => d.Code, opt => opt.MapFrom(t => t.Currency))
                 .ForMember(d => d.Name, opt => opt.MapFrom(t => t.CurrencyLong));
-            cfg.CreateMap<MarketJson, Market>();
-            cfg.CreateMap<BuyJson, Order>()
+            cfg.CreateMap<MarketJson, MarketDTO>();
+            cfg.CreateMap<BuyJson, OrderDTO>()
                 .ForMember(d => d.OrderType, opt => opt.UseValue(OrderType.Buy));
-            cfg.CreateMap<SellJson, Order>()
+            cfg.CreateMap<SellJson, OrderDTO>()
                 .ForMember(d => d.OrderType, opt => opt.UseValue(OrderType.Sell));
-            cfg.CreateMap<MarketSummaryJson, MarketSummary>();
+            cfg.CreateMap<MarketSummaryJson, MarketSummaryDTO>();
 
 
             this.mapper = new Mapper(new MapperConfiguration(cfg));
-           
-            
         }
 
-        public List<Tick> GetTicks(string market, string periodType)
+        public List<TickDTO> GetTicks(string market, PeriodType periodType)
         {
             BitterexAPI api = new BitterexAPI();
-            string ticks = api.GetTicks(market, periodType); //"thirtyMin"
+            string bitterexPeriodType = PeriodTypeConvetToString(periodType);
+            string ticks = api.GetTicks(market, bitterexPeriodType); //"thirtyMin"
             TickRootJson tickRootJson = JsonConvert.DeserializeObject<TickRootJson>(ticks);
-            List<Tick> result = new List<Tick>();
+            List<TickDTO> result = new List<TickDTO>();
             foreach (TickJson poco in tickRootJson.ItemJsons)
             {
-                Tick tick = this.mapper.Map<TickJson, Tick>(poco);
-                result.Add(tick);
+                TickDTO tickDto = this.mapper.Map<TickJson, TickDTO>(poco);
+                result.Add(tickDto);
             }
 
             return result;
         }
 
-        public List<Tick> GetLastTicks(string market, string periodType, TimeSpan offset)
+        public List<TickDTO> GetLastTicks(string market, PeriodType periodType, TimeSpan offset)
         {
             BitterexAPI api = new BitterexAPI();
-            string ticks = api.GetTicks(market, periodType); //"thirtyMin"
+            string bitterexPeriodType = PeriodTypeConvetToString(periodType);
+            string ticks = api.GetTicks(market, bitterexPeriodType); //"thirtyMin"
             TickRootJson tickRootJson = JsonConvert.DeserializeObject<TickRootJson>(ticks);
-            List<Tick> result = new List<Tick>();
+            List<TickDTO> result = new List<TickDTO>();
 
             DateTime startDateTime = DateTime.Now.Add(offset);
 
             foreach (TickJson poco in tickRootJson.ItemJsons.Where(x=>x.DateTime > startDateTime))
             {
-                Tick tick = this.mapper.Map<TickJson, Tick>(poco);
-                result.Add(tick);
+                TickDTO tickDto = this.mapper.Map<TickJson, TickDTO>(poco);
+                result.Add(tickDto);
             }
 
             return result;
@@ -71,25 +74,25 @@ namespace Bittrex
             get { return "Bitterix"; }
         }
 
-        public List<Currency> GetCurrencies()
+        public List<CurrencyDTO> GetCurrencies()
         {
             BitterexAPI api = new BitterexAPI();
             string currencies = api.GetCurrencies();
-            return GetItems<Currency, CurrencyRootJson, CurrencyJson>(currencies);
+            return GetItems<CurrencyDTO, CurrencyRootJson, CurrencyJson>(currencies);
         }
 
-        public List<Market> GetMarkets()
+        public List<MarketDTO> GetMarkets()
         {
             BitterexAPI api = new BitterexAPI();
             string markets = api.GetMarkets();
-            return GetItems<Market, MarketRootJson, MarketJson>(markets);
+            return GetItems<MarketDTO, MarketRootJson, MarketJson>(markets);
         }
 
-        public List<MarketSummary> GetMarketSummaries()
+        public List<MarketSummaryDTO> GetMarketSummaries()
         {
             BitterexAPI api = new BitterexAPI();
             string marketSummaries = api.GetMarketSummaries();
-            return GetItems<MarketSummary, MarketSummaryRootJson, MarketSummaryJson>(marketSummaries);
+            return GetItems<MarketSummaryDTO, MarketSummaryRootJson, MarketSummaryJson>(marketSummaries);
         }
 
         public List<OpenOrder> GetOpenOrders(string apiKey, string marketName)
@@ -100,26 +103,26 @@ namespace Bittrex
         }
 
 
-        public List<Order> GetOrders(string marketName)
+        public List<OrderDTO> GetOrders(string marketName)
         {
             BitterexAPI api = new BitterexAPI();
             string orderBooks = api.GetOrderBooks(marketName);
             OrderBookRootJson orderBookRootJson = JsonConvert.DeserializeObject<OrderBookRootJson>(orderBooks);
-            List<Order> result = new List<Order>();
+            List<OrderDTO> result = new List<OrderDTO>();
 
             if(orderBookRootJson.OrderBookJson.Buys.Count == 0 || orderBookRootJson.OrderBookJson.Sells.Count == 0)
-                return new List<Order>();
+                return new List<OrderDTO>();
 
-            orderBookRootJson.OrderBookJson.Buys.ForEach(x=>result.Add(this.mapper.Map<BuyJson, Order>(x)));
-            orderBookRootJson.OrderBookJson.Sells.ForEach(x=>result.Add(this.mapper.Map<SellJson, Order>(x)));
+            orderBookRootJson.OrderBookJson.Buys.ForEach(x=>result.Add(this.mapper.Map<BuyJson, OrderDTO>(x)));
+            orderBookRootJson.OrderBookJson.Sells.ForEach(x=>result.Add(this.mapper.Map<SellJson, OrderDTO>(x)));
             return result;
         }
 
-        public MarketSummary GetMarketSummary(string marketName)
+        public MarketSummaryDTO GetMarketSummary(string marketName)
         {
             BitterexAPI api = new BitterexAPI();
             string marketSummary = api.GetMarketSummary(marketName);
-            List<MarketSummary> marketSummaries = GetItems<MarketSummary, MarketSummaryRootJson, MarketSummaryJson>(marketSummary);
+            List<MarketSummaryDTO> marketSummaries = GetItems<MarketSummaryDTO, MarketSummaryRootJson, MarketSummaryJson>(marketSummary);
             
             return marketSummaries[0];
         }
@@ -137,6 +140,24 @@ namespace Bittrex
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Конвертирует общий тип периода к нужному для конкретной биржи
+        /// </summary>
+        /// <param name="periodType"></param>
+        /// <returns></returns>
+        private string PeriodTypeConvetToString(PeriodType periodType)
+        {
+            switch (periodType)
+            {
+                    case PeriodType.OneMin:
+                        return "oneMin";
+                    case PeriodType.ThirtyMin:
+                        return "thirtyMin";
+            }
+            
+            throw new NotImplementedException($"Не реализована конвертация periodType для значения {periodType}");
         }
     }
 }

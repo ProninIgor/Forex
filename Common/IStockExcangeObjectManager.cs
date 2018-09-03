@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
 using Common.Data;
+using Common.Entities;
 
 namespace Common
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IStockExcangeObjectManager
     {
         string Name { get; } 
-        List<Tick> GetTicks(string market, string periodType);
-        List<Tick> GetLastTicks(string market, string periodType, TimeSpan offset);
-        List<Currency> GetCurrencies();
-        List<Market> GetMarkets();
+        List<TickDTO> GetTicks(string market, PeriodType periodType);
+        List<TickDTO> GetLastTicks(string market, PeriodType periodType, TimeSpan offset);
+        List<CurrencyDTO> GetCurrencies();
+        List<MarketDTO> GetMarkets();
 
-        List<Order> GetOrders(string marketName);
+        List<OrderDTO> GetOrders(string marketName);
 
-        List<MarketSummary> GetMarketSummaries();
+        List<MarketSummaryDTO> GetMarketSummaries();
 
-        MarketSummary GetMarketSummary(string marketName);
+        MarketSummaryDTO GetMarketSummary(string marketName);
 
         List<OpenOrder> GetOpenOrders(string apiKey, string marketName);
     }

@@ -15,14 +15,14 @@ namespace Common
             this.objectManager = objectManager;
         }
 
-        public AnalizeSection Calculate(int marketId, CalculateType type)
+        public StakeSectionBuy Calculate(int marketId, AlgorithmCalculateType type)
         {
-            if (type == CalculateType.Agvtype)
+            if (type == AlgorithmCalculateType.Agvtype)
             {
                 return AgvCalculate(marketId);
             }
 
-            return new AnalizeSection(){MinRate = 0.00000050, MaxRate = 0.0000055};
+            return new StakeSectionBuy(0.00000050, 0.0000055);
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace Common
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        private AnalizeSection AgvCalculate(int marketId)
+        private StakeSectionBuy AgvCalculate(int marketId)
         {
-            List<Tick> ticks = this.objectManager.GetLastTicks(marketId, PeriodType.ThirtyMin, new TimeSpan(-5, 0, 0, 0));
+            List<TickDTO> ticks = this.objectManager.GetLastTicks(marketId, PeriodType.ThirtyMin, new TimeSpan(-5, 0, 0, 0));
 
             //
             IEnumerable<double> highValues = ticks.Select(x=>x.HighValue);
@@ -40,7 +40,7 @@ namespace Common
             double maxValue = highValues.Max();
             double minValue = lowValues.Min();
             double maxRate = minValue + (maxValue - minValue) / 100 * 10;
-            return new AnalizeSection(minValue, maxRate);
+            return new StakeSectionBuy(minValue, maxRate);
         }
     }
 }

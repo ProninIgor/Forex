@@ -41,14 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalizeManager.cs" />
-    <Compile Include="Data\Currency.cs" />
-    <Compile Include="Data\Market.cs" />
-    <Compile Include="Data\MarketSummary.cs" />
+    <Compile Include="Data\CurrencyDTO.cs" />
+    <Compile Include="Data\MarketDTO.cs" />
+    <Compile Include="Data\MarketSummaryDTO.cs" />
     <Compile Include="Data\OpenOrder.cs" />
-    <Compile Include="Data\Order.cs" />
-    <Compile Include="Data\Tick.cs" />
-    <Compile Include="Entities\AnalizeSection.cs" />
-    <Compile Include="Entities\CalculateType.cs" />
+    <Compile Include="Data\OrderDTO.cs" />
+    <Compile Include="Data\TickDTO.cs" />
+    <Compile Include="Entities\PeriodType.cs" />
+    <Compile Include="Entities\StakeSectionBuy.cs" />
+    <Compile Include="Entities\AlgorithmCalculateType.cs" />
     <Compile Include="IAnalizeManager.cs" />
     <Compile Include="IMonitoringManager.cs" />
     <Compile Include="IObjectManager.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="IStockExchangeAPI.cs" />
     <Compile Include="ITradeManager.cs" />
     <Compile Include="MonitoringManager.cs" />
+    <Compile Include="ObjectManager.cs" />
     <Compile Include="OrderManager.cs" />
     <Compile Include="OrderManagerCalculate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +71,9 @@
       <Project>{c09a3c16-1ea5-4f58-9b8c-f10b462f9edd}</Project>
       <Name>Enums</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="StockImplementInterfaces" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

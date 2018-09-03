@@ -62,11 +62,11 @@ namespace Bittrex.Core
 
                 if (marketOrderStatus.IsFindBuyOrder)
                 {
-                    Order buyOrder = this.OrderManager.GetBuyOrder(marketId);
+                    OrderDTO buyOrderDto = this.OrderManager.GetBuyOrder(marketId);
 
-                    if (buyOrder != null)
+                    if (buyOrderDto != null)
                     {
-                        bool isOrderComplited = this.TradeManager.SetBuyOrder(marketId, buyOrder.Quantity, buyOrder.Rate);
+                        bool isOrderComplited = this.TradeManager.SetBuyOrder(marketId, buyOrderDto.Quantity, buyOrderDto.Rate);
                         if (isOrderComplited)
                         {
                             marketOrderStatus.IsHaveOneBuyOrder = true;
@@ -86,11 +86,11 @@ namespace Bittrex.Core
 
                 if (marketOrderStatus.IsFindSellOrder)
                 {
-                    Order sellOrder = this.OrderManager.GetSellOrder(marketId);
+                    OrderDTO sellOrderDto = this.OrderManager.GetSellOrder(marketId);
 
-                    if (sellOrder != null)
+                    if (sellOrderDto != null)
                     {
-                        bool isOrderComplited = this.TradeManager.SetSellOrder(marketId, sellOrder.Quantity, sellOrder.Rate);
+                        bool isOrderComplited = this.TradeManager.SetSellOrder(marketId, sellOrderDto.Quantity, sellOrderDto.Rate);
                         if (isOrderComplited)
                         {
                             marketOrderStatus.IsHaveOneSellOrder = true;

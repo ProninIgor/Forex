@@ -2,7 +2,7 @@
 
 namespace Common.Data
 {
-    public class Tick
+    public class TickDTO
     {
         private double value;
         private double delta;

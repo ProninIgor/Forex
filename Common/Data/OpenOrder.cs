@@ -2,6 +2,9 @@
 
 namespace Common.Data
 {
+    /// <summary>
+    /// Открытый ордер
+    /// </summary>
     public class OpenOrder
     {
         public object Uuid { get; set; }

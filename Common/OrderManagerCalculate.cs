@@ -33,14 +33,14 @@ namespace Common
 
         private OrderCandidate GetBuyOrderCandidate(int marketId)
         {
-            AnalizeSection analizeSection = this.AnalizeManager.Calculate(marketId, CalculateType.Agvtype);
-            if (analizeSection == null)
+            StakeSectionBuy stakeSectionBuy = this.AnalizeManager.Calculate(marketId, AlgorithmCalculateType.Agvtype);
+            if (stakeSectionBuy == null)
                 return null;
 
             double currentRate = GetCurrentRate(marketId);
 
             //todo проверки на маркетИд
-            if (analizeSection.InSection(currentRate))
+            if (stakeSectionBuy.InSection(currentRate))
             {
                 double buyRate = GetBuyRate(marketId);
                 //todo проверку на вхождение в диапазон

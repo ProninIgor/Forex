@@ -4,6 +4,6 @@ namespace Common
 {
     public interface IAnalizeManager
     {
-        AnalizeSection Calculate(int marketId, CalculateType type);
+        StakeSectionBuy Calculate(int marketId, AlgorithmCalculateType type);
     }
 }

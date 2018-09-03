@@ -1,19 +1,12 @@
 ﻿using System;
 
-namespace DAL
+namespace Common.Data
 {
     /// <summary>
     /// Сводная информация по маркету за последние сутки
     /// </summary>
-    [Table("MarketSummaries")]
-    public class MarketSummaryPoco
+    public class MarketSummaryDTO
     {
-        /// <summary>
-        /// ИД сводной информации по маркету
-        /// </summary>
-        [Key]
-        public int Id { get; set; }
-        
         /// <summary>
         /// ИД маркета 
         /// </summary>
@@ -45,7 +38,7 @@ namespace DAL
         public double Last { get; set; }
         
         /// <summary>
-        /// Объём торгов по маркету в базовой валюте
+        /// Объём торгов по маркету в основной валюте
         /// </summary>
         public double BaseVolume { get; set; }
         

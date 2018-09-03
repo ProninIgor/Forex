@@ -73,7 +73,7 @@ namespace Bittrex
             }
         }
 
-        public List<Tick> Ticks { get; set; }
+        public List<TickDTO> Ticks { get; set; }
 
         public string ToStringMark1()
         {

@@ -24,10 +24,10 @@ namespace RecipientData
             this.objectManager = objectManager;
 
             MapperConfigurationExpression cfg = new MapperConfigurationExpression();
-            cfg.CreateMap<Currency, CurrencyPoco>();
-            cfg.CreateMap<Market, MarketPoco>();
-            cfg.CreateMap<MarketSummary, MarketSummaryPoco>();
-            cfg.CreateMap<Order, OrderPoco>().
+            cfg.CreateMap<CurrencyDTO, CurrencyPoco>();
+            cfg.CreateMap<MarketDTO, MarketPoco>();
+            cfg.CreateMap<MarketSummaryDTO, MarketSummaryPoco>();
+            cfg.CreateMap<OrderDTO, OrderPoco>().
                 ForMember(d => d.BaseVolume, opt => opt.ResolveUsing(t => t.Rate * t.Quantity));
 
             this.mapper = new Mapper(new MapperConfiguration(cfg));
@@ -35,8 +35,8 @@ namespace RecipientData
 
         public void StartCurrencies()
         {
-            List<Currency> currencies = this.objectManager.GetCurrencies();
-            List<CurrencyPoco> currencyPocos = this.mapper.Map<List<Currency>, List<CurrencyPoco>>(currencies);
+            List<CurrencyDTO> currencies = this.objectManager.GetCurrencies();
+            List<CurrencyPoco> currencyPocos = this.mapper.Map<List<CurrencyDTO>, List<CurrencyPoco>>(currencies);
             using (ConnectionDb connection = new ConnectionDb())
             {
                 IEnumerable<CurrencyPoco> pocoDb = connection.GetAll<CurrencyPoco>();
@@ -61,14 +61,14 @@ namespace RecipientData
 
         public void StartMarkets()
         {
-            List<Market> markets = this.objectManager.GetMarkets();
+            List<MarketDTO> markets = this.objectManager.GetMarkets();
             using (ConnectionDb connection = new ConnectionDb())
             {
                 IEnumerable<CurrencyPoco> currencies = connection.GetAll<CurrencyPoco>();
                 Dictionary<string, int> currenciesDictionary = currencies.ToDictionary(x => x.Code, y => y.Id);
 
                 int currencyId;
-                foreach (Market marketPoco in markets)
+                foreach (MarketDTO marketPoco in markets)
                 {
                     if (!currenciesDictionary.TryGetValue(marketPoco.BaseCurrency, out currencyId))
                         throw new ArgumentException("Please update Currencies");
@@ -81,7 +81,7 @@ namespace RecipientData
                     marketPoco.MarketCurrencyId = currencyId;
                 }
 
-                List<MarketPoco> marketPocos = this.mapper.Map<List<Market>, List<MarketPoco>>(markets);
+                List<MarketPoco> marketPocos = this.mapper.Map<List<MarketDTO>, List<MarketPoco>>(markets);
 
                 IEnumerable<MarketPoco> pocoDb = connection.GetAll<MarketPoco>();
                 Dictionary<string, MarketPoco> pocosDictionary = pocoDb.ToDictionary(x => x.MarketName);
@@ -110,10 +110,10 @@ namespace RecipientData
                 IEnumerable<MarketPoco> marketPocos = connection.GetAll<MarketPoco>();
                 Dictionary<string, int> marketDictionary = marketPocos.ToDictionary(x => x.MarketName, y => y.Id);
 
-                List<MarketSummary> marketSummaries = this.objectManager.GetMarketSummaries();
+                List<MarketSummaryDTO> marketSummaries = this.objectManager.GetMarketSummaries();
 
                 int marketId;
-                foreach (MarketSummary marketSummary in marketSummaries)
+                foreach (MarketSummaryDTO marketSummary in marketSummaries)
                 {
                     if (!marketDictionary.TryGetValue(marketSummary.MarketName, out marketId))
                         throw new ArgumentException("Please update Markets");
@@ -123,7 +123,7 @@ namespace RecipientData
                 }
 
                 List<MarketSummaryPoco> marketSummaryPocos =
-                    this.mapper.Map<List<MarketSummary>, List<MarketSummaryPoco>>(marketSummaries);
+                    this.mapper.Map<List<MarketSummaryDTO>, List<MarketSummaryPoco>>(marketSummaries);
                 connection.Insert(marketSummaryPocos);
                 
             }
@@ -137,13 +137,13 @@ namespace RecipientData
                 List<MarketPoco> marketPocos = connection.GetAll<MarketPoco>().Where(x=>x.IsActive && x.BaseCurrencyId == 2).ToList();
                 Dictionary<string, int> marketDictionary = marketPocos.ToDictionary(x => x.MarketName, y => y.Id);
 
-                ConcurrentDictionary<string, List<Order>> orderDictionary = new ConcurrentDictionary<string, List<Order>>();
+                ConcurrentDictionary<string, List<OrderDTO>> orderDictionary = new ConcurrentDictionary<string, List<OrderDTO>>();
 
                 Parallel.ForEach(marketPocos, x => { orderDictionary[x.MarketName] = GetOrders(x.MarketName); });
 
                 Parallel.ForEach(orderDictionary, pair =>
                 {
-                    List<OrderPoco> orderPocos = this.mapper.Map<List<Order>, List<OrderPoco>>(pair.Value);
+                    List<OrderPoco> orderPocos = this.mapper.Map<List<OrderDTO>, List<OrderPoco>>(pair.Value);
                     orderPocos.ForEach(x =>
                     {
                         x.MarketId = marketDictionary[pair.Key];
@@ -161,7 +161,7 @@ namespace RecipientData
             }
         }
 
-        private List<Order> GetOrders(string marketName)
+        private List<OrderDTO> GetOrders(string marketName)
         {
             return this.objectManager.GetOrders(marketName);
         }
