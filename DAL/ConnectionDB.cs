@@ -9,49 +9,65 @@ using Dapper;
 
 namespace DAL
 {
+    /// <summary>
+    /// Класс для работы с БД
+    /// </summary>
     public class ConnectionDb : IDisposable
     {
+        /// <summary>
+        /// IDbConnection в буфере
+        /// </summary>
         private SqlConnection sqlConnection;
-        public IEnumerable<CurrencyPoco> GetAllCurrencies()
-        {
-            var connection = GetDbConnection();
-            return connection.Query<CurrencyPoco>("select * from dbo.Currencies");
-        }
 
-        public void Insert(CurrencyPoco item)
-        {
-            GetDbConnection().Insert(item);
-        }
-
-        public void Insert(List<CurrencyPoco> items)
-        {
-            GetDbConnection().Insert(items);
-        }
-
+        /// <summary>
+        /// Вставка одного элемента в БД
+        /// </summary>
+        /// <param name="item"></param>
+        /// <typeparam name="T"></typeparam>
         public void Insert<T>(T item)
             where T : class 
         {
             GetDbConnection().Insert<T>(item);
         }
 
+        /// <summary>
+        /// Вставка нескольких элементов в БД
+        /// </summary>
+        /// <param name="items"></param>
+        /// <typeparam name="T"></typeparam>
         public void Insert<T>(List<T> items)
             where T : class
         {
             GetDbConnection().Insert<List<T>>(items);
         }
 
+        /// <summary>
+        /// Обновление одного элемента в БД
+        /// </summary>
+        /// <param name="item"></param>
+        /// <typeparam name="T"></typeparam>
         public void Update<T>(T item)
            where T : class
         {
             GetDbConnection().Update<T>(item);
         }
 
+        /// <summary>
+        /// Обновление нескольких элементов в БД
+        /// </summary>
+        /// <param name="items"></param>
+        /// <typeparam name="T"></typeparam>
         public void Update<T>(List<T> items)
             where T : class
         {
             GetDbConnection().Update<List<T>>(items);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public IEnumerable<T> GetAll<T>()
             where T : class
         {
@@ -61,6 +77,10 @@ namespace DAL
             return enumerable;
         }
 
+        /// <summary>
+        /// Получить IDbConnection для основной базы
+        /// </summary>
+        /// <returns></returns>
         private IDbConnection GetDbConnection()
         {
             if (this.sqlConnection != null)
