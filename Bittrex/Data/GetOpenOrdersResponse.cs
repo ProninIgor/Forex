@@ -7,7 +7,7 @@ using Common.Data;
 
 namespace Bittrex
 {
-    public class GetOpenOrdersResponse: List<OpenOrder>
-    {
-    }
+    //public class GetOpenOrdersResponse: List<OpenOrder>
+    //{
+    //}
 }

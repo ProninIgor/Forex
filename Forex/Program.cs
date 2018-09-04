@@ -10,6 +10,7 @@ using Bittrex;
 using Bittrex.Core;
 using Common;
 using Common.Data;
+using Common.Interfaces;
 using DAL;
 using Enums;
 using RecipientData;
@@ -35,7 +36,7 @@ namespace Forex
                 IEnumerable<MarketPoco> marketPocos = connection.GetAll<MarketPoco>();
                 marketNameById = marketPocos.ToDictionary(x=>x.Id, x=>x.MarketName);
             }
-            IObjectManager objectManager = new ObjectManager(new BitterexObjectManager(), marketNameById);
+            IObjectManager objectManager = new ObjectManager(new BitterexObjectManager());
             MonitoringManager monitoringManager = new MonitoringManager(new[]{2, 247}, new BitterexObjectManager(), objectManager);
             monitoringManager.Init();
             monitoringManager.Start();

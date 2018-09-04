@@ -2,25 +2,28 @@
 using System.Collections.Generic;
 using Common.Data;
 using Common.Entities;
+using Common.Interfaces;
 
 namespace Common
 {
+    /// <summary>
+    /// Менеджер обработанных данных
+    /// </summary>
     public class ObjectManager : IObjectManager
     {
+        /// <summary>
+        /// Обработанные данные с биржи
+        /// </summary>
         public IStockExcangeObjectManager StockExcangeObjectManager { get; set; }
-        public Dictionary<int, string> MarketNameById { get; }
-
-
-        public ObjectManager(IStockExcangeObjectManager stockExcangeObjectManager, Dictionary<int, string> marketNameById)
+        
+        public ObjectManager(IStockExcangeObjectManager stockExcangeObjectManager)
         {
             StockExcangeObjectManager = stockExcangeObjectManager;
-            MarketNameById = marketNameById;
         }
 
         public double GetCurrentMarketValue(int marketId)
         {
-            string marketName = this.MarketNameById[marketId];
-            MarketSummaryDTO marketSummaryDto = this.StockExcangeObjectManager.GetMarketSummary(marketName);
+            MarketSummaryDTO marketSummaryDto = this.StockExcangeObjectManager.GetMarketSummary(marketId);
             return marketSummaryDto.Last;
         }
 
@@ -41,8 +44,7 @@ namespace Common
 
         public List<TickDTO> GetLastTicks(int marketId, PeriodType periodType, TimeSpan offset)
         {
-            string marketName = this.MarketNameById[marketId];
-            List<TickDTO> lastTicks = this.StockExcangeObjectManager.GetLastTicks(marketName, periodType, offset);
+            List<TickDTO> lastTicks = this.StockExcangeObjectManager.GetLastTicks(marketId, periodType, offset);
             return lastTicks;
         }
     }

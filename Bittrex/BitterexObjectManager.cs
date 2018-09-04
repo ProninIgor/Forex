@@ -7,6 +7,7 @@ using Bittrex.JsonData;
 using Common;
 using Common.Data;
 using Common.Entities;
+using Common.Interfaces;
 using Enums;
 using Newtonsoft.Json;
 
@@ -15,7 +16,7 @@ namespace Bittrex
     public class BitterexObjectManager : IStockExcangeObjectManager
     {
         private IRuntimeMapper mapper;
-        private IStockExcangeObjectManager _stockExcangeObjectManagerImplementation;
+        //private IStockExcangeObjectManager _stockExcangeObjectManagerImplementation;
 
         public BitterexObjectManager()
         {
@@ -35,11 +36,12 @@ namespace Bittrex
             this.mapper = new Mapper(new MapperConfiguration(cfg));
         }
 
-        public List<TickDTO> GetTicks(string market, PeriodType periodType)
+        public List<TickDTO> GetTicks(int marketId, PeriodType periodType)
         {
             BitterexAPI api = new BitterexAPI();
             string bitterexPeriodType = PeriodTypeConvetToString(periodType);
-            string ticks = api.GetTicks(market, bitterexPeriodType); //"thirtyMin"
+            string marketName = GetMarketName(marketId);
+            string ticks = api.GetTicks(marketName, bitterexPeriodType); //"thirtyMin"
             TickRootJson tickRootJson = JsonConvert.DeserializeObject<TickRootJson>(ticks);
             List<TickDTO> result = new List<TickDTO>();
             foreach (TickJson poco in tickRootJson.ItemJsons)
@@ -51,11 +53,12 @@ namespace Bittrex
             return result;
         }
 
-        public List<TickDTO> GetLastTicks(string market, PeriodType periodType, TimeSpan offset)
+        public List<TickDTO> GetLastTicks(int marketId, PeriodType periodType, TimeSpan offset)
         {
             BitterexAPI api = new BitterexAPI();
             string bitterexPeriodType = PeriodTypeConvetToString(periodType);
-            string ticks = api.GetTicks(market, bitterexPeriodType); //"thirtyMin"
+            string marketName = GetMarketName(marketId);
+            string ticks = api.GetTicks(marketName, bitterexPeriodType); //"thirtyMin"
             TickRootJson tickRootJson = JsonConvert.DeserializeObject<TickRootJson>(ticks);
             List<TickDTO> result = new List<TickDTO>();
 
@@ -70,8 +73,12 @@ namespace Bittrex
             return result;
         }
 
-        public string Name {
-            get { return "Bitterix"; }
+        public string Name {get { return "Bitterix"; }
+        }
+
+        private string GetMarketName(int marketId)
+        {
+            throw new NotImplementedException();
         }
 
         public List<CurrencyDTO> GetCurrencies()
@@ -95,17 +102,19 @@ namespace Bittrex
             return GetItems<MarketSummaryDTO, MarketSummaryRootJson, MarketSummaryJson>(marketSummaries);
         }
 
-        public List<OpenOrder> GetOpenOrders(string apiKey, string marketName)
+        public List<OpenOrder> GetOpenOrders(string apiKey, int marketId)
         {
             BitterexAPI api = new BitterexAPI();
+            string marketName = GetMarketName(marketId);
             string openOrders = api.GetOpenOrders(apiKey, marketName);
             return GetItems<OpenOrder, OpenOrderRootJson, OpenOrderJson>(openOrders);
         }
 
 
-        public List<OrderDTO> GetOrders(string marketName)
+        public List<OrderDTO> GetOrders(int marketId)
         {
             BitterexAPI api = new BitterexAPI();
+            string marketName = GetMarketName(marketId);
             string orderBooks = api.GetOrderBooks(marketName);
             OrderBookRootJson orderBookRootJson = JsonConvert.DeserializeObject<OrderBookRootJson>(orderBooks);
             List<OrderDTO> result = new List<OrderDTO>();
@@ -118,9 +127,10 @@ namespace Bittrex
             return result;
         }
 
-        public MarketSummaryDTO GetMarketSummary(string marketName)
+        public MarketSummaryDTO GetMarketSummary(int marketId)
         {
             BitterexAPI api = new BitterexAPI();
+            string marketName = GetMarketName(marketId);
             string marketSummary = api.GetMarketSummary(marketName);
             List<MarketSummaryDTO> marketSummaries = GetItems<MarketSummaryDTO, MarketSummaryRootJson, MarketSummaryJson>(marketSummary);
             
@@ -159,5 +169,6 @@ namespace Bittrex
             
             throw new NotImplementedException($"Не реализована конвертация periodType для значения {periodType}");
         }
+        
     }
 }

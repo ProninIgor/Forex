@@ -8,6 +8,7 @@ using AutoMapper;
 using AutoMapper.Configuration;
 using Common;
 using Common.Data;
+using Common.Interfaces;
 using DAL;
 
 namespace RecipientData
@@ -139,7 +140,7 @@ namespace RecipientData
 
                 ConcurrentDictionary<string, List<OrderDTO>> orderDictionary = new ConcurrentDictionary<string, List<OrderDTO>>();
 
-                Parallel.ForEach(marketPocos, x => { orderDictionary[x.MarketName] = GetOrders(x.MarketName); });
+                Parallel.ForEach(marketPocos, x => { orderDictionary[x.MarketName] = GetOrders(x.Id); });
 
                 Parallel.ForEach(orderDictionary, pair =>
                 {
@@ -161,9 +162,9 @@ namespace RecipientData
             }
         }
 
-        private List<OrderDTO> GetOrders(string marketName)
+        private List<OrderDTO> GetOrders(int marketId)
         {
-            return this.objectManager.GetOrders(marketName);
+            return this.objectManager.GetOrders(marketId);
         }
 
         private string GetRootDirectory()

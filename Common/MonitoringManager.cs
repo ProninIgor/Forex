@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common;
 using Common.Data;
+using Common.Interfaces;
 
 namespace Bittrex.Core
 {
+    
     public class MonitoringManager : IMonitoringManager
     {
         private Dictionary<int, MarketOrderStatus> _marketOrderStatuses = new Dictionary<int, MarketOrderStatus>();

@@ -1,5 +1,8 @@
-namespace Common
+namespace Common.Interfaces
 {
+    /// <summary>
+    /// Контракт данных биржы (ис)
+    /// </summary>
     public interface IStockExchangeAPI
     {
         string GetMarkets();

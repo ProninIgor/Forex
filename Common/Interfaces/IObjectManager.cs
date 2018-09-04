@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Common.Data;
 using Common.Entities;
 
-namespace Common
+namespace Common.Interfaces
 {
     /// <summary>
     /// Контракт для получение данных для расчётов (обработанные)

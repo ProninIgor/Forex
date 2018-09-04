@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bittrex.Core;
 using Common.Data;
+using Common.Interfaces;
 using Enums;
 
 namespace Common

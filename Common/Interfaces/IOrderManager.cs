@@ -1,7 +1,6 @@
-using Common;
 using Common.Data;
 
-namespace Bittrex.Core
+namespace Common.Interfaces
 {
     /// <summary>
     /// Менеджер ставок. Хранит в себе инфу по ставкам, принимает решения о том, как расчитать магазин

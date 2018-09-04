@@ -41,13 +41,13 @@ namespace Bittrex
 
                 if (volumes[marketPoco.MarketName] < 200)
                     continue;
-
-                List<TickDTO> ticks = bom.GetLastTicks(marketPoco.MarketName, PeriodType.ThirtyMin, new TimeSpan(-10, 0, 0, 0)); //thirtyMin oneMin
-                Period period = new Period();
-                period.MarketName = marketPoco.MarketName;
-                period.Ticks = ticks;
-                period.LastVolume = volumes[marketPoco.MarketName];
-                periods.Add(period);
+//
+//                List<TickDTO> ticks = bom.GetLastTicks(marketPoco., PeriodType.ThirtyMin, new TimeSpan(-10, 0, 0, 0)); //thirtyMin oneMin
+//                Period period = new Period();
+//                period.MarketName = marketPoco.MarketName;
+//                period.Ticks = ticks;
+//                period.LastVolume = volumes[marketPoco.MarketName];
+//                periods.Add(period);
                 //string ticks = api.GetTicks(marketPoco.MarketName, "thirtyMin");
                 //TickRootJson tickRootPoco = JsonConvert.DeserializeObject<TickRootJson>(ticks);
                 //List<TickJson> tickPocos = tickRootPoco.ItemJsons.Where(x=> x.DateTime.Day > i).ToList();

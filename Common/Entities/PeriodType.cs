@@ -9,6 +9,9 @@
 //        public const string OneMin = "oneMin";
 //    }
 
+    /// <summary>
+    /// Типы периодов для тиков
+    /// </summary>
     public enum PeriodType
     {
         ThirtyMin = 30,

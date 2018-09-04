@@ -1,4 +1,6 @@
-﻿namespace Bittrex.Core
+﻿using Bittrex.Core;
+
+namespace Common.Interfaces
 {
     /// <summary>
     /// Главный менеджер для работы со ставками

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Common;
+using Common.Interfaces;
 
 namespace Bittrex
 {

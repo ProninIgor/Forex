@@ -1,5 +1,6 @@
 using System;
 using Bittrex.Core;
+using Common.Interfaces;
 
 namespace Common
 {
