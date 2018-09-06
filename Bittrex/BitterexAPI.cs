@@ -8,7 +8,7 @@ using Common.Interfaces;
 
 namespace Bittrex
 {
-    public class BitterexAPI : IStockExchangeAPI
+    public class BitterexAPI //: IStockExchangeAPI
     {
         private const string ApiKeyPublic_v1_1 = "https://bittrex.com/api/v1.1/public";
         private const string ApiKeyPublic_v2_0 = "https://bittrex.com/Api/v2.0/pub";

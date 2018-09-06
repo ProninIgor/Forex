@@ -14,7 +14,7 @@ namespace Bittrex
         decimal CalculateMinimumOrderQuantity(string market, decimal price);
         dynamic GetMarkets();
         dynamic GetTicker(string market);
-        GetOpenOrdersResponse GetOpenOrders(string market);        
+        //GetOpenOrdersResponse GetOpenOrders(string market);        
         OrderResponse PlaceBuyOrder(string market, decimal quantity, decimal price);
         OrderResponse PlaceSellOrder(string market, decimal quantity, decimal price);
         void CancelOrder(string uuid);

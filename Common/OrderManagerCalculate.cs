@@ -7,6 +7,9 @@ using Enums;
 
 namespace Common
 {
+    /// <summary>
+    /// Менеджер ставок. Хранит в себе инфу по ставкам, принимает решения о том, как расчитывать ставки
+    /// </summary>
     public partial class OrderManager
     {
         private double GetCurrentRate(int marketId)
@@ -53,6 +56,9 @@ namespace Common
 
         }
 
+        /// <summary>
+        /// Запускает работу модуля
+        /// </summary>
         public void Working()
         {
             while (true)

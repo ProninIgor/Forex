@@ -81,10 +81,10 @@ namespace Bittrex
             return this.Call<dynamic>(ApiCallGetTicker, Tuple.Create("market", GetMarketName(market)));
         }
 
-        public GetOpenOrdersResponse GetOpenOrders(string market)
-        {
-            return this.Call<GetOpenOrdersResponse>(ApiCallGetOpenOrders, Tuple.Create("market", GetMarketName(market)));
-        }
+//        public GetOpenOrdersResponse GetOpenOrders(string market)
+//        {
+//            return this.Call<GetOpenOrdersResponse>(ApiCallGetOpenOrders, Tuple.Create("market", GetMarketName(market)));
+//        }
 
         public void CancelOrder(string uuid)
         {

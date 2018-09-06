@@ -13,10 +13,13 @@ using Newtonsoft.Json;
 
 namespace Bittrex
 {
+    /// <summary>
+    /// Класс получения обработанных данных с конкретной биржи
+    /// </summary>
     public class BitterexObjectManager : IStockExcangeObjectManager
     {
         private IRuntimeMapper mapper;
-        //private IStockExcangeObjectManager _stockExcangeObjectManagerImplementation;
+        
 
         public BitterexObjectManager()
         {
@@ -102,13 +105,13 @@ namespace Bittrex
             return GetItems<MarketSummaryDTO, MarketSummaryRootJson, MarketSummaryJson>(marketSummaries);
         }
 
-        public List<OpenOrder> GetOpenOrders(string apiKey, int marketId)
-        {
-            BitterexAPI api = new BitterexAPI();
-            string marketName = GetMarketName(marketId);
-            string openOrders = api.GetOpenOrders(apiKey, marketName);
-            return GetItems<OpenOrder, OpenOrderRootJson, OpenOrderJson>(openOrders);
-        }
+//        public List<OpenOrder> GetOpenOrders(string apiKey, int marketId)
+//        {
+//            BitterexAPI api = new BitterexAPI();
+//            string marketName = GetMarketName(marketId);
+//            string openOrders = api.GetOpenOrders(apiKey, marketName);
+//            return GetItems<OpenOrder, OpenOrderRootJson, OpenOrderJson>(openOrders);
+//        }
 
 
         public List<OrderDTO> GetOrders(int marketId)

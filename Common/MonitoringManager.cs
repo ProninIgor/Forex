@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Common;
 using Common.Data;
 using Common.Interfaces;
+using Common.IoC;
+using Ninject.Parameters;
 
 namespace Bittrex.Core
 {
@@ -24,20 +26,31 @@ namespace Bittrex.Core
 
             this.marketIds = marketIds;
 
-            OrderManager = new OrderManager(marketIds, stockExcangeObjectManager, objectManager);
-            TradeManager = new TradeManager();
+
+            List<IParameter> parameters = new List<IParameter>();
+            parameters.Add(IoC.GetCtorParam("marketId", marketIds));
+            parameters.Add(IoC.GetCtorParam("stockExcangeObjectManager", stockExcangeObjectManager));
+            parameters.Add(IoC.GetCtorParam("objectManager", objectManager));
+            
+            OrderManager = IoC.Get<IOrderManager>(parameters);
+            TradeManager = IoC.Get<ITradeManager>();
         }
 
         public void Init()
         {
+            //Проставляем статусы для маркетов за которыми будем следить
             foreach (int marketId in this.marketIds)
             {
                 _marketOrderStatuses.Add(marketId, new MarketOrderStatus());
             }
 
+            // стартуем модуль ставо для конкретных маркетов
             Task.Run(() => OrderManager.Working());
         }
 
+        /// <summary>
+        /// Логика усановки ставок на снятие и установку
+        /// </summary>
         public void Start()
         {
             for (var index = 0;;)

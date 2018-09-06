@@ -9,6 +9,9 @@ using Enums;
 
 namespace Common
 {
+    /// <summary>
+    /// Менеджер ставок. Хранит в себе инфу по ставкам, принимает решения о том, как расчитывать ставки
+    /// </summary>
     public partial class OrderManager : IOrderManager
     {
         //todo: Сделать возможным только один кандижат на маркет и тип. Или нотифицировать по Guid для идентификации кандидата

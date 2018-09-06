@@ -30,13 +30,7 @@ namespace Forex
 
         static void Main(string[] args)
         {
-            Dictionary<int, string> marketNameById;
-            using (ConnectionDb connection = new ConnectionDb())
-            {
-                IEnumerable<MarketPoco> marketPocos = connection.GetAll<MarketPoco>();
-                marketNameById = marketPocos.ToDictionary(x=>x.Id, x=>x.MarketName);
-            }
-            IObjectManager objectManager = new ObjectManager(new BitterexObjectManager());
+           IObjectManager objectManager = new ObjectManager(new BitterexObjectManager());
             MonitoringManager monitoringManager = new MonitoringManager(new[]{2, 247}, new BitterexObjectManager(), objectManager);
             monitoringManager.Init();
             monitoringManager.Start();
