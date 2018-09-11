@@ -20,27 +20,27 @@ namespace Common.Data
         /// <summary>
         /// Максимальное значение в базовой валюте
         /// </summary>
-        public double High { get; set; }
+        public decimal High { get; set; }
         
         /// <summary>
         /// Минимальное значение в базовой валюте
         /// </summary>
-        public double Low { get; set; }
+        public decimal Low { get; set; }
         
         /// <summary>
         /// Объём торгов по маркету в основной валюте
         /// </summary>
-        public double Volume { get; set; }
+        public decimal Volume { get; set; }
         
         /// <summary>
         /// Последнее значение по маркету
         /// </summary>
-        public double Last { get; set; }
+        public decimal Last { get; set; }
         
         /// <summary>
         /// Объём торгов по маркету в основной валюте
         /// </summary>
-        public double BaseVolume { get; set; }
+        public decimal BaseVolume { get; set; }
         
         /// <summary>
         /// ??? Временной штамп информации
@@ -50,12 +50,12 @@ namespace Common.Data
         /// <summary>
         /// ???
         /// </summary>
-        public double Bid { get; set; }
+        public decimal Bid { get; set; }
         
         /// <summary>
         /// ???
         /// </summary>
-        public double Ask { get; set; }
+        public decimal Ask { get; set; }
         
         /// <summary>
         /// ???
@@ -70,7 +70,7 @@ namespace Common.Data
         /// <summary>
         /// ???
         /// </summary>
-        public double PrevDay { get; set; }
+        public decimal PrevDay { get; set; }
         
         /// <summary>
         /// ???

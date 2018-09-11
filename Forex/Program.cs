@@ -21,9 +21,9 @@ namespace Forex
     {
         private class Message
         {
-            public double Last { get; set; }
+            public decimal Last { get; set; }
             public string MarketName { get; set; }
-            public double BaseVolume { get; set; }
+            public decimal BaseVolume { get; set; }
             public IEnumerable<OrderDTO> Buies { get; set; }
             public IEnumerable<OrderDTO> Sells { get; set; }
         }
@@ -220,10 +220,10 @@ namespace Forex
             // Адрес ресурса, к которому выполняется запрос
             //Console.WriteLine("Введите значение ВЫШЕ которого будет сигнал");
             //string readLine = Console.ReadLine();
-            //double max;
+            //decimal max;
             //try
             //{
-            //    max = double.Parse(readLine.Replace(".", ","));
+            //    max = decimal.Parse(readLine.Replace(".", ","));
             //}
             //catch (Exception e)
             //{
@@ -233,10 +233,10 @@ namespace Forex
 
             //Console.WriteLine("Введите значение НИЖЕ которого будет сигнал");
             // readLine = Console.ReadLine();
-            //double min;
+            //decimal min;
             //try
             //{
-            //    min = double.Parse(readLine.Replace(".", ","));
+            //    min = decimal.Parse(readLine.Replace(".", ","));
             //}
             //catch (Exception e)
             //{
@@ -267,7 +267,7 @@ namespace Forex
 
 
             //        string str = response.Substring(64, 6);
-            //       double value = double.Parse(str.Replace(".", ","));
+            //       decimal value = decimal.Parse(str.Replace(".", ","));
 
             //        Console.WriteLine(value);
             //        if (value < min || value > max)

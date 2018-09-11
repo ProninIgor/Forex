@@ -39,7 +39,7 @@ namespace Common.Data
         /// <summary>
         /// Минимальный объём ордера (в основной валюте)
         /// </summary>
-        public double MinTradeSize { get; set; }
+        public decimal MinTradeSize { get; set; }
         
         /// <summary>
         /// Строковый код маркета

@@ -16,7 +16,7 @@ namespace Bittrex.Core
         /// <param name="quality"></param>
         /// <param name="rate"></param>
         /// <returns></returns>
-        bool SetBuyOrder(int marketId, double quality, double rate);
+        bool SetBuyOrder(int marketId, decimal quality, decimal rate);
         
         /// <summary>
         /// Устанавливает ордер на продажу
@@ -25,6 +25,6 @@ namespace Bittrex.Core
         /// <param name="quality"></param>
         /// <param name="rate"></param>
         /// <returns></returns>
-        bool SetSellOrder(int marketId, double quality, double rate);
+        bool SetSellOrder(int marketId, decimal quality, decimal rate);
     }
 }

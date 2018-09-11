@@ -44,6 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalizeManager.cs" />
+    <Compile Include="CalculateClasses\AvgCalculateClass.cs" />
+    <Compile Include="CalculateClasses\PredifineParamNames.cs" />
+    <Compile Include="CommonResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Data\CurrencyDTO.cs" />
     <Compile Include="Data\MarketDTO.cs" />
     <Compile Include="Data\MarketSummaryDTO.cs" />
@@ -52,7 +59,9 @@
     <Compile Include="Entities\PeriodType.cs" />
     <Compile Include="Entities\StakeSectionBuy.cs" />
     <Compile Include="Entities\AlgorithmCalculateType.cs" />
+    <Compile Include="Exceptions\CalculateClassParamException.cs" />
     <Compile Include="Interfaces\IAnalizeManager.cs" />
+    <Compile Include="Interfaces\ICalculateClass.cs" />
     <Compile Include="Interfaces\IMonitoringManager.cs" />
     <Compile Include="Interfaces\IObjectManager.cs" />
     <Compile Include="Interfaces\IOrderManager.cs" />
@@ -60,6 +69,7 @@
     <Compile Include="Interfaces\IStockExcangeObjectManager.cs" />
     <Compile Include="Interfaces\IStockExchangeAPI.cs" />
     <Compile Include="Interfaces\ITradeManager.cs" />
+    <Compile Include="Interfaces\Params.cs" />
     <Compile Include="IoC\CommonConfigModule.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="MonitoringManager.cs" />
@@ -83,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CommonResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

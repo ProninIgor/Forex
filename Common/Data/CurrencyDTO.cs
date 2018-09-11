@@ -23,7 +23,7 @@
         /// <summary>
         /// ???
         /// </summary>
-        public double TxFee { get; set; }
+        public decimal TxFee { get; set; }
         
         /// <summary>
         /// ???

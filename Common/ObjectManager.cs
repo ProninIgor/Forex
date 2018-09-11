@@ -21,18 +21,18 @@ namespace Common
             StockExcangeObjectManager = stockExcangeObjectManager;
         }
 
-        public double GetCurrentMarketValue(int marketId)
+        public decimal GetCurrentMarketValue(int marketId)
         {
             MarketSummaryDTO marketSummaryDto = this.StockExcangeObjectManager.GetMarketSummary(marketId);
             return marketSummaryDto.Last;
         }
 
-        public double GetCurrentMarketBuyValue(int marketId)
+        public decimal GetCurrentMarketBuyValue(int marketId)
         {
             throw new System.NotImplementedException();
         }
 
-        public double GetCurrentMarketSellValue(int marketId)
+        public decimal GetCurrentMarketSellValue(int marketId)
         {
             throw new System.NotImplementedException();
         }

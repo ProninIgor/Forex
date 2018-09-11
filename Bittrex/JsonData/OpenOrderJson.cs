@@ -10,11 +10,11 @@ namespace Bittrex.JsonData
         public string OrderUuid { get; set; }
         public string Exchange { get; set; }
         public string OrderType { get; set; }
-        public double Quantity { get; set; }
-        public double QuantityRemaining { get; set; }
-        public double Limit { get; set; }
-        public double CommissionPaid { get; set; }
-        public double Price { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal QuantityRemaining { get; set; }
+        public decimal Limit { get; set; }
+        public decimal CommissionPaid { get; set; }
+        public decimal Price { get; set; }
         public object PricePerUnit { get; set; }
         public DateTime Opened { get; set; }
         public object Closed { get; set; }

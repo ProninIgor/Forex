@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Security.AccessControl;
 using System.Threading;
+using Common.CalculateClasses;
 using Common.Entities;
+using Common.Interfaces;
 using Enums;
 
 namespace Common
@@ -12,7 +14,7 @@ namespace Common
     /// </summary>
     public partial class OrderManager
     {
-        private double GetCurrentRate(int marketId)
+        private decimal GetCurrentRate(int marketId)
         {
             return this.ObjectManager.GetCurrentMarketValue(marketId);
         }
@@ -22,33 +24,35 @@ namespace Common
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        private double GetBuyRate(int marketId)
+        private decimal GetBuyRate(int marketId)
         {
 
             return GetCurrentRate(marketId);
         }
 
-        private double GetQuantity(int marketId)
+        private decimal GetQuantity(int marketId)
         {
             //todo определение размера ставки исходя из минимального значения, успешности метода вычисления и вероятности попадания. подтверждения со стороны пользователя
-            return 0.0005;
+            return 0.0005m;
         }
 
         private OrderCandidate GetBuyOrderCandidate(int marketId)
         {
-            StakeSectionBuy stakeSectionBuy = this.AnalizeManager.Calculate(marketId, AlgorithmCalculateType.Agvtype);
+            ICalculateClass avgCalculateClass = new AvgCalculateClass(this.ObjectManager);
+            
+            StakeSectionBuy stakeSectionBuy = avgCalculateClass.Calculate(marketId);
             if (stakeSectionBuy == null)
                 return null;
 
-            double currentRate = GetCurrentRate(marketId);
+            decimal currentRate = GetCurrentRate(marketId);
 
             //todo проверки на маркетИд
             if (stakeSectionBuy.InSection(currentRate))
             {
-                double buyRate = GetBuyRate(marketId);
+                decimal buyRate = GetBuyRate(marketId);
                 //todo проверку на вхождение в диапазон
 
-                double quantity = GetQuantity(marketId);
+                decimal quantity = GetQuantity(marketId);
                 return new OrderCandidate(){Id = Guid.NewGuid(), MarketId = marketId, OrderType = OrderType.Buy, Rate = buyRate, Quantity = quantity};
             }
 

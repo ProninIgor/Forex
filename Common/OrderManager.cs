@@ -115,9 +115,9 @@ namespace Common
 
             public OrderType OrderType { get; set; }
 
-            public double Quantity { get; set; }
+            public decimal Quantity { get; set; }
 
-            public double Rate { get; set; }
+            public decimal Rate { get; set; }
         }
     }
 }

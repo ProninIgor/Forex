@@ -27,7 +27,7 @@ namespace DAL
         /// <summary>
         /// Минимальная ставка по маркету в основной валюте 
         /// </summary>
-        public double MinTradeSize { get; set; }
+        public decimal MinTradeSize { get; set; }
         
         /// <summary>
         /// Строковое название маркета BTC-ADA, BTC-ETH

@@ -10,9 +10,9 @@ namespace Common.Interfaces
     /// </summary>
     public interface IObjectManager
     {
-        double GetCurrentMarketValue(int marketId);
-        double GetCurrentMarketBuyValue(int marketId);
-        double GetCurrentMarketSellValue(int marketId);
+        decimal GetCurrentMarketValue(int marketId);
+        decimal GetCurrentMarketBuyValue(int marketId);
+        decimal GetCurrentMarketSellValue(int marketId);
         List<TickDTO> GetTicks(int marketId, string periodType);
 
         /// <summary>

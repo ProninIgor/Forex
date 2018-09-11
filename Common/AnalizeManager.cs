@@ -35,7 +35,7 @@ namespace Common
                 return AgvCalculate(marketId);
             }
 
-            return new StakeSectionBuy(0.00000050, 0.0000055);
+            return new StakeSectionBuy(0.00000050m, 0.0000055m);
         }
 
         /// <summary>
@@ -48,11 +48,11 @@ namespace Common
             List<TickDTO> ticks = this.objectManager.GetLastTicks(marketId, PeriodType.ThirtyMin, new TimeSpan(-5, 0, 0, 0));
 
             //
-            IEnumerable<double> highValues = ticks.Select(x=>x.HighValue);
-            IEnumerable<double> lowValues = ticks.Select(x => x.LowValue);
-            double maxValue = highValues.Max();
-            double minValue = lowValues.Min();
-            double maxRate = minValue + (maxValue - minValue) / 100 * 10;
+            IEnumerable<decimal> highValues = ticks.Select(x=>x.HighValue);
+            IEnumerable<decimal> lowValues = ticks.Select(x => x.LowValue);
+            decimal maxValue = highValues.Max();
+            decimal minValue = lowValues.Min();
+            decimal maxRate = minValue + (maxValue - minValue) / 100 * 10;
             return new StakeSectionBuy(minValue, maxRate);
         }
     }

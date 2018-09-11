@@ -14,19 +14,19 @@ namespace Common.Entities
         /// <summary>
         /// Минимальная ставка для ордера
         /// </summary>
-        public double MinRate { get; set; }
+        public decimal MinRate { get; set; }
 
         /// <summary>
         /// Максимальное ставка для ордера
         /// </summary>
-        public double MaxRate { get; set; }
+        public decimal MaxRate { get; set; }
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="minRate">Минимальная ставка для ордера</param>
         /// <param name="maxRate">Максимальное ставка для ордера</param>
-        public StakeSectionBuy(double minRate, double maxRate)
+        public StakeSectionBuy(decimal minRate, decimal maxRate)
         {
             MinRate = minRate;
             MaxRate = maxRate;
@@ -37,7 +37,7 @@ namespace Common.Entities
         /// </summary>
         /// <param name="rate">ставка</param>
         /// <returns></returns>
-        public bool InSection(double rate)
+        public bool InSection(decimal rate)
         {
             return this.MinRate <= rate && rate <= this.MaxRate;
         }

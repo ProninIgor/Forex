@@ -7,12 +7,12 @@ namespace Common.Data
         /// <summary>
         /// Объем торгов в основной валюте
         /// </summary>
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         
         /// <summary>
         /// Ставка ордера
         /// </summary>
-        public double Rate { get; set; }
+        public decimal Rate { get; set; }
         
         /// <summary>
         /// Тип ордера (покупка/продажа)

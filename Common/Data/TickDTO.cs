@@ -4,33 +4,33 @@ namespace Common.Data
 {
     public class TickDTO
     {
-        private double value;
-        private double delta;
+        private decimal value;
+        private decimal delta;
 
         /// <summary>
         /// Значение при открытие тика
         /// </summary>
-        public double OpenValue { get; set; }
+        public decimal OpenValue { get; set; }
 
         /// <summary>
         /// Максимальное значение за тик
         /// </summary>
-        public double HighValue { get; set; }
+        public decimal HighValue { get; set; }
 
         /// <summary>
         /// Минимальное значение за тик
         /// </summary>
-        public double LowValue { get; set; }
+        public decimal LowValue { get; set; }
 
         /// <summary>
         /// Значение при закрытии тика
         /// </summary>
-        public double CloseValue { get; set; }
+        public decimal CloseValue { get; set; }
 
         /// <summary>
         /// Объём торгов при тике
         /// </summary>
-        public double Volume { get; set; }
+        public decimal Volume { get; set; }
 
         /// <summary>
         /// Дата ничала тика
@@ -40,16 +40,16 @@ namespace Common.Data
         /// <summary>
         /// Объём тика в биткойнах
         /// </summary>
-        public double BitcoinValue { get; set; }
+        public decimal BitcoinValue { get; set; }
 
         /// <summary>
         /// Медиана тика
         /// </summary>
-        public double Value
+        public decimal Value
         {
             get
             {
-                return Math.Abs(value) < 0.0000000001
+                return Math.Abs(value) < 0.0000000001m
                     ? (this.value = (this.OpenValue + this.CloseValue) / 2)
                     : this.value;
             }
@@ -58,10 +58,10 @@ namespace Common.Data
         /// <summary>
         /// Изменение за тик. Дельта в долевом значении
         /// </summary>
-        public double Delta {
+        public decimal Delta {
             get
             {
-                return Math.Abs(delta) < 0.0000000001
+                return Math.Abs(delta) < 0.0000000001m
                  ? (this.delta = (this.CloseValue - this.OpenValue) / this.OpenValue)
                  : this.delta;
             }

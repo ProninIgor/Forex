@@ -24,7 +24,7 @@ namespace Bittrex
 
             string marketSummaries = api.GetMarketSummaries();
             MarketSummaryRootJson marketSummaryRootJson = JsonConvert.DeserializeObject<MarketSummaryRootJson>(marketSummaries);
-            Dictionary<string, double> volumes = marketSummaryRootJson.ItemJsons.ToDictionary(x=>x.MarketName, x=>x.BaseVolume);
+            Dictionary<string, decimal> volumes = marketSummaryRootJson.ItemJsons.ToDictionary(x=>x.MarketName, x=>x.BaseVolume);
 
             Dictionary<string, IEnumerable<TickJson>> responcies = new Dictionary<string, IEnumerable<TickJson>>();
             List<Period> periods = new List<Period>();
@@ -52,10 +52,10 @@ namespace Bittrex
                 //TickRootJson tickRootPoco = JsonConvert.DeserializeObject<TickRootJson>(ticks);
                 //List<TickJson> tickPocos = tickRootPoco.ItemJsons.Where(x=> x.DateTime.Day > i).ToList();
                 //responcies[marketPoco.MarketName] = tickPocos;
-                //double min = tickPocos.MinAvg(x => x.Value);
-                //double max = tickPocos.MaxAvg(x => x.Value);
-                //double last = tickPocos[tickPocos.Count - 1].Value;
-                //double avg = tickPocos.Average(x => x.Value);
+                //decimal min = tickPocos.MinAvg(x => x.Value);
+                //decimal max = tickPocos.MaxAvg(x => x.Value);
+                //decimal last = tickPocos[tickPocos.Count - 1].Value;
+                //decimal avg = tickPocos.Average(x => x.Value);
                 //Console.WriteLine($"{marketPoco.MarketName}. min: {FormatValue(min)} max: {FormatValue(max)} last: {FormatValue(last)} avg: {FormatValue(avg)}");
             }
 
