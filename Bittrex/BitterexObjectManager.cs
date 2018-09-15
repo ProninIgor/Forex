@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.Configuration;
+using Bittrex.Data;
 using Bittrex.JsonData;
 using Common;
 using Common.Data;
@@ -114,6 +115,11 @@ namespace Bittrex
 //        }
 
 
+        /// <summary>
+        /// Получить открытые ставки на покупку и продажу (все ставки)
+        /// </summary>
+        /// <param name="marketId"></param>
+        /// <returns></returns>
         public List<OrderDTO> GetOrders(int marketId)
         {
             BitterexAPI api = new BitterexAPI();
@@ -138,6 +144,11 @@ namespace Bittrex
             List<MarketSummaryDTO> marketSummaries = GetItems<MarketSummaryDTO, MarketSummaryRootJson, MarketSummaryJson>(marketSummary);
             
             return marketSummaries[0];
+        }
+
+        public List<OpenOrderDTO> GetOpenOrders(int marketId)
+        {
+            throw new NotImplementedException();
         }
 
         private List<TResult> GetItems<TResult, TRoot, TItem>(string json)

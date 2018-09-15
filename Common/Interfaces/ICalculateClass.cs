@@ -23,6 +23,6 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        StakeSectionBuy Calculate(int marketId);
+        StakeSection Calculate(int marketId);
     }
 }

@@ -85,7 +85,7 @@ namespace Common.Tests.CalculateClasses
             @params.Add(PredifineParamNames.PeriodType, ((int) PeriodType.ThirtyMin).ToString());
             @params.Add(PredifineParamNames.TimeSpan, 0.ToString());
             avgCalculateClass.Init(@params);
-            StakeSectionBuy actual = avgCalculateClass.Calculate(1);
+            StakeSection actual = avgCalculateClass.Calculate(1);
 
             Assert.Equal(expectedResult.MinRate, actual.MinRate);
             Assert.Equal(expectedResult.MaxRate, actual.MaxRate);
@@ -106,7 +106,7 @@ namespace Common.Tests.CalculateClasses
             @params.Add(PredifineParamNames.PeriodType, ((int) PeriodType.ThirtyMin).ToString());
             @params.Add(PredifineParamNames.TimeSpan, 0.ToString());
             avgCalculateClass.Init(@params);
-            StakeSectionBuy actual = avgCalculateClass.Calculate(1);
+            StakeSection actual = avgCalculateClass.Calculate(1);
 
             Assert.Equal(expectedResult.MinRate, actual.MinRate);
             Assert.Equal(expectedResult.MaxRate, actual.MaxRate);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Data;
@@ -28,7 +29,7 @@ namespace Bittrex.Core
 
 
             List<IParameter> parameters = new List<IParameter>();
-            parameters.Add(IoC.GetCtorParam("marketId", marketIds));
+            parameters.Add(IoC.GetCtorParam("marketIds", marketIds));
             parameters.Add(IoC.GetCtorParam("stockExcangeObjectManager", stockExcangeObjectManager));
             parameters.Add(IoC.GetCtorParam("objectManager", objectManager));
             
@@ -55,6 +56,7 @@ namespace Bittrex.Core
         {
             for (var index = 0;;)
             {
+                Thread.Sleep(1000);
                 if (index > marketIds.Length -1)
                 {
                     index = 0;
@@ -68,53 +70,41 @@ namespace Bittrex.Core
                     index++;
                     continue;
                 }
-
-                if (!marketOrderStatus.IsFindBuyOrder && this.OrderManager.HasBuyOrder(marketId))
+                
+                // если уже есть ставка на покупку или продажу, то делать ничего не надо
+                if (this.OrderManager.HasBuyOrder(marketId) || this.OrderManager.HasSellOrder(marketId))
                 {
-                    marketOrderStatus.IsFindBuyOrder = true;
+                    // определение исполненного ордера на покупку и на продажу.
+                    this.OrderManager.BuyOrderCompleted(marketId);
                     continue;
                 }
 
-                if (marketOrderStatus.IsFindBuyOrder)
+                if (OrderManager.IsFindOrderBuy(marketId))
                 {
                     OrderDTO buyOrderDto = this.OrderManager.GetBuyOrder(marketId);
-
                     if (buyOrderDto != null)
                     {
-                        bool isOrderComplited = this.TradeManager.SetBuyOrder(marketId, buyOrderDto.Quantity, buyOrderDto.Rate);
-                        if (isOrderComplited)
+                        bool isOrderCompleted = this.TradeManager.SetBuyOrder(marketId, buyOrderDto.Quantity, buyOrderDto.Rate);
+                        if(isOrderCompleted)
                         {
-                            marketOrderStatus.IsHaveOneBuyOrder = true;
-                            OrderManager.BuyOrderComplited(marketId);
+                            OrderManager.SetOrderBuy(marketId);
                         }
                     }
 
-                    marketOrderStatus.IsFindBuyOrder = false;
-                    index++;
                 }
-
-                if (!marketOrderStatus.IsFindSellOrder && this.OrderManager.HasSellOrder(marketId))
+                
+                if (OrderManager.IsFindOrderSell(marketId))
                 {
-                    marketOrderStatus.IsFindSellOrder = true;
-                    continue;
-                }
-
-                if (marketOrderStatus.IsFindSellOrder)
-                {
-                    OrderDTO sellOrderDto = this.OrderManager.GetSellOrder(marketId);
-
-                    if (sellOrderDto != null)
+                    OrderDTO sellOrder = this.OrderManager.GetSellOrder(marketId);
+                    if (sellOrder != null)
                     {
-                        bool isOrderComplited = this.TradeManager.SetSellOrder(marketId, sellOrderDto.Quantity, sellOrderDto.Rate);
-                        if (isOrderComplited)
+                        bool isOrderCompleted = this.TradeManager.SetSellOrder(marketId, sellOrder.Quantity, sellOrder.Rate);
+                        if(isOrderCompleted)
                         {
-                            marketOrderStatus.IsHaveOneSellOrder = true;
-                            OrderManager.SellOrderComplited(marketId);
+                            OrderManager.SetOrderSell(marketId);
                         }
                     }
 
-                    marketOrderStatus.IsFindSellOrder = false;
-                    index++;
                 }
 
                 index++;

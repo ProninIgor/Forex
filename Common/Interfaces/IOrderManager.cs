@@ -8,14 +8,14 @@ namespace Common.Interfaces
     public interface IOrderManager
     {
         /// <summary>
-        /// ≈сть ли ставка на покупку дл€ указанного магазина
+        /// ≈сть ли поставленна€ ставка на покупку дл€ указанного магазина
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
         bool HasBuyOrder(int marketId);
 
         /// <summary>
-        /// ≈сть ли ставка на продажу дл€ указанного магазина
+        /// ≈сть ли поставленна€ ставка на продажу дл€ указанного магазина
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
@@ -28,6 +28,14 @@ namespace Common.Interfaces
         /// <returns></returns>
         OrderDTO GetBuyOrder(int marketId);
 
+        bool IsFindOrderBuy(int marketId);
+
+        bool IsFindOrderSell(int marketId);
+        
+        void SetOrderBuy(int marketId);
+
+        void SetOrderSell(int marketId);
+
         /// <summary>
         /// ѕолучить ставку на продажу
         /// </summary>
@@ -35,12 +43,13 @@ namespace Common.Interfaces
         /// <returns></returns>
         OrderDTO GetSellOrder(int marketId);
 
-        void BuyOrderComplited(int marketId);
+        void BuyOrderCompleted(int marketId);
 
-        void SellOrderComplited(int marketId);
-
+        void SellOrderCompleted(int marketId);
 
         void Working();
+
+        //void StopFindBuyOrder(int marketId);
 
         IStockExcangeObjectManager StockExcangeObjectManager { get; set; }
     }

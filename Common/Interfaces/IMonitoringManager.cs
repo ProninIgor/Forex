@@ -25,10 +25,9 @@ namespace Common.Interfaces
             this.IsActive = true;
         }
         public bool IsActive { get; set; }
-        public bool IsFindSellOrder { get; set; }
-        public bool IsFindBuyOrder { get; set; }
-        public bool IsHaveOneBuyOrder { get; set; }
-        public bool IsHaveOneSellOrder { get; set; }
-        
+//        public bool IsFindSellOrder { get; set; }
+//        public bool IsFindBuyOrder { get; set; }
+//        public bool IsHaveOneBuyOrder { get; set; }
+//        public bool IsHaveOneSellOrder { get; set; }
     }
 }

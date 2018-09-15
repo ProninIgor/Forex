@@ -26,6 +26,9 @@ namespace Common.CalculateClasses
         /// <returns></returns>
         private TimeSpan? timeDiff;
 
+        /// <summary>
+        /// Порог, с которого начинается нижний коридор для ставок (от 1% до 100%)
+        /// </summary>
         public decimal Delta {
             get
             {
@@ -36,6 +39,9 @@ namespace Common.CalculateClasses
             }
         }
 
+        /// <summary>
+        /// Тип периода для анализа
+        /// </summary>
         public PeriodType PeriodType
         {
             get
@@ -47,6 +53,10 @@ namespace Common.CalculateClasses
             }
         }
 
+        /// <summary>
+        /// Временной сдвиг, за который анализируем  данные
+        /// </summary>
+        /// <returns></returns>
         public TimeSpan TimeDiff
         {
             get
@@ -102,7 +112,7 @@ namespace Common.CalculateClasses
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        public StakeSectionBuy Calculate(int marketId)
+        public StakeSection Calculate(int marketId)
         {
             return AgvCalculate(marketId);
         }
@@ -112,7 +122,7 @@ namespace Common.CalculateClasses
         /// </summary>
         /// <param name="marketId"></param>
         /// <returns></returns>
-        private StakeSectionBuy AgvCalculate(int marketId)
+        private StakeSection AgvCalculate(int marketId)
         {
             List<TickDTO> ticks = this.objectManager.GetLastTicks(marketId, PeriodType, TimeDiff);
 
@@ -122,7 +132,7 @@ namespace Common.CalculateClasses
             decimal maxValue = highValues.Max();
             decimal minValue = lowValues.Min();
             decimal maxRate = minValue + (maxValue - minValue) / 100 * Delta;
-            return new StakeSectionBuy(minValue, maxRate);
+            return new StakeSection(minValue, maxRate);
         }
     }
 }

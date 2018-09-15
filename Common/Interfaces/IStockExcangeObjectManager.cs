@@ -16,12 +16,17 @@ namespace Common.Interfaces
         List<CurrencyDTO> GetCurrencies();
         List<MarketDTO> GetMarkets();
 
+        /// <summary>
+        /// Получить открытые ставки на покупку и продажу (все ставки)
+        /// </summary>
+        /// <param name="marketId"></param>
+        /// <returns></returns>
         List<OrderDTO> GetOrders(int marketId);
 
         List<MarketSummaryDTO> GetMarketSummaries();
 
         MarketSummaryDTO GetMarketSummary(int marketId);
 
-       // List<OpenOrder> GetOpenOrders(string apiKey, int marketId);
+        List<OpenOrderDTO> GetOpenOrders(int marketId);
     }
 }

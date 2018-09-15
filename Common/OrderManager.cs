@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Bittrex.Core;
 using Common.Data;
+using Common.Entities;
 using Common.Interfaces;
 using Enums;
 
@@ -16,6 +16,10 @@ namespace Common
     {
         //todo: Сделать возможным только один кандижат на маркет и тип. Или нотифицировать по Guid для идентификации кандидата
         private ConcurrentDictionary<string, OrderCandidate> orderCandidates = new ConcurrentDictionary<string, OrderCandidate>();
+        private Dictionary<int, MarketOrderStatus> _marketOrderStatuses = new Dictionary<int, MarketOrderStatus>();
+        
+        private Dictionary<int, OrderBO> _orderBos = new Dictionary<int, OrderBO>();
+        private Dictionary<int, OrderDTO> _marketOrders = new Dictionary<int, OrderDTO>();
         private int[] marketIds;
         private IAnalizeManager AnalizeManager { get; set; }
         public IStockExcangeObjectManager StockExcangeObjectManager { get; set; }
@@ -28,10 +32,12 @@ namespace Common
             this.marketIds = marketIds;
             foreach (int marketId in marketIds)
             {
+                _orderBos.Add(marketId, new OrderBO(){Status = OrderBOStatus.Start});
                 string key = GetBuyKey(marketId);
                 orderCandidates.TryAdd(key, null);
                 key = GetSellKey(marketId);
                 orderCandidates.TryAdd(key, null);
+                _marketOrderStatuses.Add(marketId, new MarketOrderStatus());
             }
             this.AnalizeManager = new AnalizeManager(objectManager);
             this.StockExcangeObjectManager = stockExcangeObjectManager;
@@ -50,17 +56,32 @@ namespace Common
 
         public bool HasBuyOrder(int marketId)
         {
-            return this.orderCandidates[GetBuyKey(marketId)] != null;
+            return _orderBos[marketId].Status == OrderBOStatus.SetOrderBuy;
         }
 
         public bool HasSellOrder(int marketId)
         {
-            return this.orderCandidates[GetSellKey(marketId)] != null;
+            return _orderBos[marketId].Status == OrderBOStatus.SetOrderSell;
+        }
+        
+        public bool IsFindOrderBuy(int marketId)
+        {
+            return GetOrderBo(marketId).Status == OrderBOStatus.FindOrderBuy;
+        }
+
+        private OrderBO GetOrderBo(int marketId)
+        {
+            return _orderBos[marketId];
+        }
+
+        public bool IsFindOrderSell(int marketId)
+        {
+            return _orderBos[marketId].Status == OrderBOStatus.FindOrderSell;
         }
 
         public OrderDTO GetBuyOrder(int marketId)
         {
-            OrderCandidate orderCandidate = this.orderCandidates[GetBuyKey(marketId)];
+            OrderCandidate orderCandidate = _orderBos[marketId].OrderCandidateBuy;
 
             OrderDTO buyOrderDto = orderCandidate == null 
                 ? null 
@@ -71,7 +92,7 @@ namespace Common
 
         public OrderDTO GetSellOrder(int marketId)
         {
-            OrderCandidate orderCandidate = this.orderCandidates[GetSellKey(marketId)];
+            OrderCandidate orderCandidate = _orderBos[marketId].OrderCandidateSell;
 
             OrderDTO sellOrderDto = orderCandidate == null
                 ? null
@@ -80,14 +101,30 @@ namespace Common
             return sellOrderDto;
         }
 
-        public void BuyOrderComplited(int marketId)
+        public void SetOrderBuy(int marketId)
         {
-            this.orderCandidates[GetBuyKey(marketId)] = null;
+            var orderBo = this.GetOrderBo(marketId);
+            orderBo.Quantity = orderBo.OrderCandidateBuy.Quantity;
+            orderBo.Rate = orderBo.OrderCandidateBuy.Rate;
+            orderBo.Status = OrderBOStatus.SetOrderBuy;
         }
 
-        public void SellOrderComplited(int marketId)
+        public void SetOrderSell(int marketId)
         {
-            this.orderCandidates[GetSellKey(marketId)] = null;
+            var orderBo = this.GetOrderBo(marketId);
+            orderBo.Status = OrderBOStatus.SetOrderSell;
+        }
+
+        public void BuyOrderCompleted(int marketId)
+        {
+            var orderBo = this.GetOrderBo(marketId);
+            orderBo.Status = OrderBOStatus.CompliteBuy;
+        }
+
+        public void SellOrderCompleted(int marketId)
+        {
+            var orderBo = this.GetOrderBo(marketId);
+            orderBo.Status = OrderBOStatus.CompliteSell;
         }
 
         private string GetKey(int marketId, OrderType type)
@@ -103,21 +140,6 @@ namespace Common
             }
 
             return $"{typeName}{marketId}";
-        }
-
-       
-
-        private class OrderCandidate
-        {
-            public Guid Id { get; set; }
-
-            public int MarketId { get; set; }
-
-            public OrderType OrderType { get; set; }
-
-            public decimal Quantity { get; set; }
-
-            public decimal Rate { get; set; }
         }
     }
 }

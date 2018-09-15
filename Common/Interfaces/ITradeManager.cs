@@ -1,6 +1,4 @@
-﻿using Common.Interfaces;
-
-namespace Bittrex.Core
+﻿namespace Common.Interfaces
 {
     /// <summary>
     /// Контракт менеджера трейдера

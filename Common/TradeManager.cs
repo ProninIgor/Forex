@@ -9,13 +9,13 @@ namespace Common
         public IRealTimeData RealTimeData { get; }
         public bool SetBuyOrder(int marketId, decimal quality, decimal rate)
         {
-            Console.WriteLine($"{marketId}-{quality}-{rate}");
+            Console.WriteLine($"BUY {marketId}-{quality}-{rate}");
             return true;
         }
 
         public bool SetSellOrder(int marketId, decimal quality, decimal rate)
         {
-            //todo
+            Console.WriteLine($"SELL {marketId}-{quality}-{rate}");
             return true;
         }
     }
