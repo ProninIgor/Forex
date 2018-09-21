@@ -56,7 +56,7 @@ namespace Bittrex.Core
         {
             for (var index = 0;;)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
                 if (index > marketIds.Length -1)
                 {
                     index = 0;
@@ -72,10 +72,17 @@ namespace Bittrex.Core
                 }
                 
                 // если уже есть ставка на покупку или продажу, то делать ничего не надо
-                if (this.OrderManager.HasBuyOrder(marketId) || this.OrderManager.HasSellOrder(marketId))
+                if (this.OrderManager.HasBuyOrder(marketId)) 
                 {
                     // определение исполненного ордера на покупку и на продажу.
                     this.OrderManager.BuyOrderCompleted(marketId);
+                    continue;
+                }
+
+                if (this.OrderManager.HasSellOrder(marketId))
+                {
+                    // определение исполненного ордера на покупку и на продажу.
+                    this.OrderManager.SellOrderCompleted(marketId);
                     continue;
                 }
 

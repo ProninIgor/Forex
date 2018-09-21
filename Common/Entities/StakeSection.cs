@@ -35,5 +35,15 @@
         {
             return this.MinRate <= rate && rate <= this.MaxRate;
         }
+        
+        /// <summary>
+        /// Проверка вхождения ставки в диапазон
+        /// </summary>
+        /// <param name="rate">ставка</param>
+        /// <returns></returns>
+        public bool InSectionSell(decimal rate)
+        {
+            return this.MinRate <= rate ;
+        }
     }
 }

@@ -73,7 +73,31 @@ namespace Common
                     Id = Guid.NewGuid(),
                     MarketId = marketId,
                     OrderType = OrderType.Buy,
-                    Rate = buyRate,
+                    Rate = currentRate,
+                    Quantity = quantity
+                };
+            }
+
+            return null;
+        }
+        
+        private OrderCandidate GetOrderCandidateSell(int marketId, StakeSection stakeSectionBuy)
+        {
+            decimal currentRate = GetCurrentRate(marketId);
+
+            //todo проверки на маркетИд
+            if (stakeSectionBuy.InSectionSell(currentRate))
+            {
+                decimal buyRate = GetBuyRate(marketId);
+                //todo проверку на вхождение в диапазон
+
+                decimal quantity = GetQuantity(marketId);
+                return new OrderCandidate()
+                {
+                    Id = Guid.NewGuid(),
+                    MarketId = marketId,
+                    OrderType = OrderType.Buy,
+                    Rate = currentRate,
                     Quantity = quantity
                 };
             }
@@ -81,10 +105,11 @@ namespace Common
             return null;
         }
 
-        private StakeSection GetStakeSectionSell(OrderBO orderBo)
+        private StakeSection GetStakeSectionSell(int marketId)
         {
-            var minOrder = orderBo.Rate = orderBo.Rate + orderBo.Rate * 0.01m;
-            var maxOrder = minOrder + minOrder * 0.1m;
+            OrderBO orderBo = this._orderBos[marketId];
+            var minOrder = orderBo.Rate = orderBo.Rate + Math.Abs(orderBo.Rate * 0.01m);
+            var maxOrder = minOrder + Math.Abs(minOrder * 0.5m);
             return new StakeSection(minOrder, maxOrder);
         }
 
@@ -95,7 +120,7 @@ namespace Common
         {
             while (true)
             {
-                Thread.Sleep(1*1000);
+                Thread.Sleep(1*100);
                 foreach (int marketId in marketIds)
                 {
                     OrderBOStatus orderBoStatus = this._orderBos[marketId].Status;
@@ -103,26 +128,55 @@ namespace Common
                     switch (orderBoStatus)
                     {
                         case OrderBOStatus.Start:
-                            OrderCandidate orderCandidate = GetBuyOrderCandidate(marketId);
-
-                            if (orderCandidate != null)
+                            StakeSection stakeSectionBuy = GetStakeSectionBuy(marketId);
+                            if (stakeSectionBuy != null)
                             {
-                                this._orderBos[marketId].OrderCandidateBuy = orderCandidate;
+                                this._orderBos[marketId].StakeSectionBuy = stakeSectionBuy;
+                                this._orderBos[marketId].Status = OrderBOStatus.FindSectionBuy;  
+                            }
+                            break;
+                        case OrderBOStatus.FindSectionBuy:
+                            OrderCandidate orderCandidateBuy = GetOrderCandidate(marketId, this._orderBos[marketId].StakeSectionBuy);
+                            if (orderCandidateBuy != null)
+                            {
+                                this._orderBos[marketId].OrderCandidateBuy = orderCandidateBuy;
                                 this._orderBos[marketId].Status = OrderBOStatus.FindOrderBuy;
                             }
-
                             break;
                         case OrderBOStatus.FindOrderBuy:
                         case OrderBOStatus.SetOrderBuy:
-                            break;
+                           break;
+                        
+//                            StakeSection stakeSectionSell = GetStakeSectionSell(this._orderBos[marketId]);
+//                            if (stakeSectionSell != null)
+//                            {
+//                                this._orderBos[marketId].StakeSectionSell = stakeSectionSell;
+//                                this._orderBos[marketId].Status = OrderBOStatus.FindSectionSell; 
+//                            }
+//                            break;
 
+                      
                         case OrderBOStatus.CompliteBuy:
-                            StakeSection stakeSection = GetStakeSectionSell(this._orderBos[marketId]);
-                            var candidate = GetOrderCandidate(marketId, stakeSection);
-
-                            this._orderBos[marketId].StakeSectionSell = stakeSection;
-                            this._orderBos[marketId].OrderCandidateSell = candidate;
-                            this._orderBos[marketId].Status = OrderBOStatus.FindOrderSell;
+                            StakeSection stakeSectionSell = GetStakeSectionSell(marketId);
+                            if (stakeSectionSell != null)
+                            {
+                                this._orderBos[marketId].StakeSectionSell = stakeSectionSell;
+                                this._orderBos[marketId].Status = OrderBOStatus.FindSectionSell;  
+                            }
+                            break;
+//                            var candidate = GetOrderCandidate(marketId, stakeSection);
+//
+//                            this._orderBos[marketId].StakeSectionSell = stakeSection;
+//                            this._orderBos[marketId].OrderCandidateSell = candidate;
+//                            this._orderBos[marketId].Status = OrderBOStatus.FindOrderSell;
+                           
+                        case OrderBOStatus.FindSectionSell:
+                            OrderCandidate orderCandidateSell = GetOrderCandidateSell(marketId, this._orderBos[marketId].StakeSectionSell);
+                            if (orderCandidateSell != null)
+                            {
+                                this._orderBos[marketId].OrderCandidateSell = orderCandidateSell;
+                                this._orderBos[marketId].Status = OrderBOStatus.FindOrderSell;
+                            }
                             break;
                         case OrderBOStatus.FindOrderSell:
                         case OrderBOStatus.SetOrderSell:
@@ -154,6 +208,27 @@ namespace Common
                     //this.orderCandidates.TryUpdate(GetBuyKey(marketId), orderCandidate, null);
                 }
             }
+        }
+
+        private StakeSection GetStakeSectionBuy(int marketId)
+        {
+            ICalculateClass avgCalculateClass = new AvgCalculateClass(this.ObjectManager);
+            
+            Params @params = new Params();
+            @params.Add(PredifineParamNames.Delta, 10.ToString());
+            @params.Add(PredifineParamNames.PeriodType, 30.ToString());
+            @params.Add(PredifineParamNames.TimeSpan, 1.ToString());
+            avgCalculateClass.Init(@params);
+            
+            
+            StakeSection stakeSectionBuy = avgCalculateClass.Calculate(marketId);
+            if (stakeSectionBuy == null)
+                return null;
+
+            return stakeSectionBuy;
+//            var minOrder = orderBo.Rate = orderBo.Rate + orderBo.Rate * 0.01m;
+//            var maxOrder = minOrder + minOrder * 0.1m;
+//            return new StakeSection(minOrder, maxOrder);
         }
     }
 }
